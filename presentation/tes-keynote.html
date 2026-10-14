@@ -658,7 +658,7 @@
       <div class="abs hid sp2" style="left:1060px;top:-120px;width:560px;height:1500px;background:linear-gradient(180deg,rgba(18,104,255,.45),rgba(18,104,255,0));clip-path:polygon(44% 0,56% 0,100% 100%,0 100%);transform-origin:50% 0"></div>
       <div class="abs hid eye5" style="left:760px;top:330px;width:400px;height:400px;border-radius:50%;background:#fff;border:6px solid var(--navy-deep);box-shadow:14px 14px 0 var(--navy-deep);display:flex;align-items:center;justify-content:center;color:var(--blue-bright)">${ico('eye', 260, 'currentColor', 1.6)}</div>
       <div class="abs dt5 hid" style="left:560px;top:200px;width:800px;text-align:center"><span class="chip b lg" style="font-size:70px;height:110px;padding:0 60px">OCT</span>
-        <div class="disp" style="font-size:600px;line-height:.9;color:var(--navy-deep)">17</div>
+        <div class="disp" style="font-size:600px;line-height:.9;color:var(--navy-deep)">18</div>
         <span class="chip g lg dd" style="font-size:64px;height:100px">…</span></div>
       ${PRESS.map(([n, f], i) => { const row = i < 4 ? 0 : 1, col = row ? i - 4 : i, x = row ? 360 + col * 440 : 110 + col * 440; return `
         <div class="abs card pt hid" style="left:${x}px;top:${row ? 580 : 190}px;width:400px;height:330px;overflow:hidden;--sh:8px;background:${f ? '#fff' : 'var(--blue-bright)'}">
@@ -691,7 +691,7 @@
           .fromTo($('.lk5', el), { scale: .3, autoAlpha: 0, rotation: -15 }, { scale: 1, autoAlpha: 1, rotation: 0, duration: .8, ease: 'back.out(2)' }, .4)
           .fromTo($('.lkb', el), { scale: 0 }, { scale: 1, duration: .5, ease: 'back.out(4)' }, .9)
           .to($('.lkb', el), { rotation: 14, duration: .08, yoyo: true, repeat: 9 }, 1.5); return tl; }, 2.8),
-      bt('S', 'That changes October 17th.', el => { const tl = T(), dd = $('.dd', el), days = Math.ceil((new Date(2026, 9, 17, 23, 59) - Date.now()) / 864e5);
+      bt('S', 'That changes October 18th.', el => { const tl = T(), dd = $('.dd', el), days = Math.ceil((new Date(2026, 9, 18, 23, 59) - Date.now()) / 864e5);
         dd.textContent = days > 1 ? `IN ${days} DAYS` : days === 1 ? 'TOMORROW' : days === 0 ? 'TODAY' : 'LIVE NOW';
         tl.to($('.lkb', el), { x: 500, y: -700, rotation: 360, scale: 1.5, autoAlpha: 0, duration: .8, ease: 'power3.in' }, 0).to($('.lk5', el), { y: 1300, rotation: 10, duration: .8, ease: 'power3.in' }, .5)
           .fromTo($('.dt5', el), { rotationX: -90, autoAlpha: 0, y: 200, transformPerspective: 1200 }, { rotationX: 0, autoAlpha: 1, y: 0, duration: 1, ease: 'back.out(1.5)' }, .7)
@@ -836,7 +836,7 @@
         <div class="abs pS" style="left:150px;top:410px;text-align:center"><img src="assets/img/shaurya.jpg" alt="" style="width:300px;height:300px;border-radius:50%;object-fit:cover;object-position:50% 28%;border:6px solid #fff;box-shadow:12px 12px 0 var(--navy-deep);display:block"><span class="chip" style="margin-top:22px">SHAURYA</span></div>
         <div class="abs pA" style="right:150px;top:410px;text-align:center"><img src="assets/img/akaash.jpg" alt="" style="width:300px;height:300px;border-radius:50%;object-fit:cover;object-position:50% 28%;border:6px solid #fff;box-shadow:12px 12px 0 var(--navy-deep);display:block"><span class="chip" style="margin-top:22px">AKAASH</span></div>
         ${logoTile(300, 'ft')}<div class="disp fn" style="font-size:380px;line-height:.8;color:#fff">NUVO</div>
-        <div class="urls" style="display:flex;gap:22px"><span class="chip lg">getnuvo.net</span><span class="chip g lg">Launching Oct 17</span></div></div>`,
+        <div class="urls" style="display:flex;gap:22px"><span class="chip lg">getnuvo.net</span><span class="chip g lg">Launching Oct 18</span></div></div>`,
     beats: [
       bt('A', 'We stopped waiting for permission.', el => { const tl = T(), d = $('.dlg', el), cu = $('.cur', el);
         tl.fromTo(d, { scale: .6, autoAlpha: 0, y: 80 }, { scale: 1, autoAlpha: 1, y: 0, duration: .6, ease: 'back.out(1.8)' }, 0)
