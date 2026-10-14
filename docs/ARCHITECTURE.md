@@ -66,3 +66,11 @@ A tiny module on `window.NuvoSettings`: `get()`, `set(patch)`, `onChange(fn)`, `
 ## Backup deck
 
 `tes-readable.html` is an earlier, simpler design: 7 slides, GSAP timelines with click-through steps, no timing engine. It shares fonts and the phone video.
+
+## Energy levels
+
+Each beat has a level from the `HI` and `CALM` lists near `DELIVERY` (everything else is normal). `runBeat()` sets `CALMLVL` (the level plus the Energy setting's shift) before calling a beat's `run`. `T()` returns a timeline whose `to/from/fromTo` are wrapped when the level is 0: bouncy eases (`back`, `bounce`, `elastic`) become `power2.out`, durations grow 30%, staggers 25% and yoyo repeats halve. Confetti only fires for bursts of 100 or more particles, so it is reserved for a few big moments.
+
+## Scaling
+
+`fit()` computes `--ui = innerWidth / 1920` (clamped 0.7 to 3) and `window.__scale`. The coaching UI uses CSS `zoom: var(--ui)`; the waitlist canvas sizes itself by `__scale x devicePixelRatio` so dots stay crisp on 4K; ambient shapes and confetti scale with `--ui`.

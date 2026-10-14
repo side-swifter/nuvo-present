@@ -2,7 +2,7 @@
    API: NuvoSettings.get() / set(patch) / onChange(fn) / render(el, opts). Defaults are in DEF. See docs/OPERATING.md. */
 (function () {
   const KEY = 'nuvo-settings', BASE_WPS = 3.0, BASE_TOTAL = 180, SHARE_A = 0.53;
-  const DEF = { pace: 1, auto: true, countdown: 3, adapt: true, paceA: 1, paceS: 1, perf: 'auto', confetti: true, ambient: true, mode: 'present' };
+  const DEF = { pace: 1, auto: true, countdown: 3, adapt: true, paceA: 1, paceS: 1, perf: 'auto', energy: 'balanced', confetti: true, ambient: true, mode: 'present' };
   const subs = [];
   const get = () => { try { return Object.assign({}, DEF, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { return Object.assign({}, DEF); } };
   const set = p => { const s = Object.assign(get(), p); try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} subs.forEach(f => f(s, p)); return s; };
@@ -64,6 +64,9 @@
         <div class="hint">Time to breathe between pressing → and the first line.</div></div>
       <div class="nvr"><label class="nvtg"><span><h4>Auto-run</h4><span class="hint">Beats fire by themselves on the clock. Off = click for every beat.</span></span><span class="nvsw"><input type="checkbox" data-t="auto"><i></i></span></label></div>
       <div class="nvr"><label class="nvtg"><span><h4>Adapt to my pace</h4><span class="hint">Each time you press → early or late, the clock learns how fast you really talk and re-times the rest.</span></span><span class="nvsw"><input type="checkbox" data-t="adapt"><i></i></span></label></div>
+      <div class="nvr"><div class="nvhd"><h4>Energy</h4></div>
+        <div class="nvseg" data-k="energy"><button data-v="calm">Calm</button><button data-v="balanced">Balanced</button><button data-v="lively">Lively</button></div>
+        <div class="hint">How busy the visuals feel. Calm = softer, slower, fewer wobbles. Balanced = big moments pop, the rest breathe. Lively = everything punchy.</div></div>
       <div class="nvr"><div class="nvhd"><h4>Performance</h4></div>
         <div class="nvseg" data-k="perf" data-str="1"><button data-v="auto">Auto</button><button data-v="on">Lite</button><button data-v="off">Full</button></div>
         <div class="hint">Lite turns off the floating shapes, confetti and glow. Auto switches to Lite by itself if your computer is struggling.</div></div>
@@ -72,6 +75,7 @@
     const q = s => root.querySelector(s), qa = s => [...root.querySelectorAll(s)];
     function refresh() {
       const s = get();
+      qa('[data-k="energy"] button').forEach(b => b.classList.toggle('on', b.dataset.v === s.energy));
       qa('[data-k="perf"] button').forEach(b => b.classList.toggle('on', b.dataset.v === s.perf));
       qa('[data-k="mode"] button').forEach(b => b.classList.toggle('on', b.dataset.v === s.mode));
       qa('[data-k="countdown"] button').forEach(b => b.classList.toggle('on', +b.dataset.v === +s.countdown));
@@ -82,7 +86,7 @@
       q('#pas').value = s.paceA; q('#pss').value = s.paceS; put('#pan', s.paceA); put('#psn', s.paceS);
       qa('[data-t]').forEach(i => { i.checked = !!s[i.dataset.t]; });
     }
-    qa('[data-k] button').forEach(b => b.onclick = () => { const k = b.parentNode.dataset.k; set({ [k]: (k === 'mode' || k === 'perf') ? b.dataset.v : +b.dataset.v }); refresh(); });
+    qa('[data-k] button').forEach(b => b.onclick = () => { const k = b.parentNode.dataset.k; set({ [k]: (k === 'mode' || k === 'perf' || k === 'energy') ? b.dataset.v : +b.dataset.v }); refresh(); });
     q('#ps').oninput = e => { set({ pace: +e.target.value }); refresh(); };
     q('#pas').oninput = e => { set({ paceA: +e.target.value }); refresh(); };
     q('#pss').oninput = e => { set({ paceS: +e.target.value }); refresh(); };

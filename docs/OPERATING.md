@@ -49,6 +49,7 @@ Open from the picker page or with **S** in the deck. Saved in the browser (`loca
 - **Countdown** - none, 3 s or 5 s before the first line.
 - **Auto-run** - whether beats fire on the clock.
 - **Adapt to my pace** - every time you press `->` early or late, the clock learns your real pace and re-times everything after it.
+- **Energy** - Calm, Balanced (default) or Lively. Each beat is tagged calm, normal or big in the code. Balanced lets about a fifth of the beats pop (bounces, wobbles) while most use soft eases and slower motion so the judges can follow. Calm drops every beat one level; Lively raises every beat one level.
 - **Performance** - Auto, Lite or Full. Lite turns off floating shapes, confetti and glow. Auto switches to Lite if the first seconds run under about 40 fps.
 - **Confetti** and **Background motion** - individual switches.
 
@@ -65,3 +66,7 @@ Open from the picker page or with **S** in the deck. Saved in the browser (`loca
 - Open the deck once on the actual presenting laptop (the first load downloads about 10 MB of media).
 - Check the projector resolution. Stage is 16:9; other ratios get letterboxed.
 - Keep the backup (`tes-readable.html`) one click away.
+
+## Big screens and TVs
+
+The slides are drawn on a 1920x1080 stage and scaled to the screen, so they stay sharp up to 4K. The practice bar, run-through panel, settings and hints scale with the screen width too. Waitlist dots and the phone video render at full resolution. For a TV: connect it as the second display, press `F`, and run `Present`; the 16:9 stage fills it. On a non-16:9 display the stage is centred with bars at the sides.
