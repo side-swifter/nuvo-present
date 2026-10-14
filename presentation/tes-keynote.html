@@ -486,7 +486,7 @@
           <div style="font:800 48px var(--display);letter-spacing:.14em;color:var(--blue-bright)">${k}</div>
           <div class="disp" style="font-size:290px;line-height:.85;color:var(--navy-deep);margin-top:6px">${n}</div>
           <div class="disp" style="font-size:84px;line-height:1;margin-top:4px">${l}</div>
-          <div class="abs circ" style="right:48px;top:44px;width:150px;height:150px">${ico(ic, 84)}</div>
+          <div class="abs circ" style="right:48px;bottom:92px;width:116px;height:116px">${ico(ic, 64)}</div>
           <div class="abs" style="left:56px;right:56px;bottom:46px;height:30px;border-radius:16px;background:#e2e8f2;overflow:hidden"><i class="rf" data-p="${p}" style="display:block;height:100%;width:0;border-radius:16px;background:linear-gradient(90deg,#1268ff,#4d94ff)"></i></div></div>`).join('')}
       <svg class="abs cur3 hid" style="left:1500px;top:900px" width="90" height="90" viewBox="0 0 24 24"><path d="M5 3l14 8-6 2 3.5 6.5-3 1.5L10 15l-4 4z" fill="#07152b" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
       <svg class="abs rt hid" style="left:0;top:0" width="1920" height="1080" viewBox="0 0 1920 1080">
@@ -497,7 +497,7 @@
         <path class="r3" d="M 200 800 C 260 700, 140 520, 260 420 S 200 200, 380 150" fill="none" stroke="#8b5cf6" stroke-width="16" stroke-linecap="round" pathLength="1000" stroke-dasharray="1000" stroke-dashoffset="1000"/>
         <circle class="runner" r="22" fill="#fff" stroke="#07152b" stroke-width="6" cx="200" cy="800"/></svg>
       ${[['dollar', 1700, 880, '#27c947'], ['book', 1080, 200, '#f59e0b'], ['moon', 380, 150, '#8b5cf6'], ['dumbbell', 1760, 300, '#1268ff']].map(([n, x, y, c]) => `<div class="abs circ re hid" style="left:${x - 60}px;top:${y - 60}px;width:120px;height:120px;color:${c}">${ico(n, 64)}</div>`).join('')}
-      <span class="chip abs hid rl" style="left:110px;top:90px;font-size:40px;height:72px"><span class="rt1">RUN</span></span>
+      <div class="abs hid rl" style="left:0;right:0;top:34px;display:flex;justify-content:center"><span class="chip" style="font-size:46px;height:78px"><span class="rt1">RUN</span></span></div>
       ${Array.from({ length: 14 }, () => `<div class="abs hid sty" style="left:960px;top:540px;color:#f5b301">${ico('star', Math.round(rnd(50, 110)), 'currentColor', 1.6)}</div>`).join('')}
       <div class="abs hid wish" style="left:50%;top:48%;margin:-230px 0 0 -230px">${logoTile(460)}</div>`,
     beats: [
@@ -727,11 +727,11 @@
       ${[0, 1, 2, 3].map(i => `<div class="abs hid sl6" style="left:${100 + i * 440}px;top:240px;width:400px;height:560px;border-radius:22px;border:6px dashed #35507f;display:flex;align-items:center;justify-content:center;color:#35507f">${ico('plus', 140, 'currentColor', 1.4)}</div>`).join('')}
       ${[['star', 'RECOGNITION'], ['dollar', 'FUNDING'], ['compass', 'MENTORSHIP'], ['network', 'CONNECTIONS']].map(([n, c], i) => `
         <div class="abs card nd hid" style="left:${100 + i * 440}px;top:240px;width:400px;height:560px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;--shc:var(--blue-bright)">
-          <div style="color:var(--blue-bright)">${ico(n, 220, 'currentColor', 1.6)}</div><div class="disp" style="font-size:62px;letter-spacing:.04em">${c}</div></div>`).join('')}
+          <div style="color:var(--blue-bright)">${ico(n, 220, 'currentColor', 1.6)}</div><div class="disp" style="font-size:50px;letter-spacing:.01em;white-space:nowrap">${c}</div></div>`).join('')}
       <div class="abs hid coin" style="left:710px;top:290px;width:500px;height:500px;border-radius:50%;background:var(--blue-bright);border:8px solid #fff;box-shadow:0 0 140px rgba(18,104,255,.7);display:flex;align-items:center;justify-content:center;color:#fff;font:900 380px var(--display)">$</div>
-      <div class="abs ces disp hid" style="left:0;right:0;top:130px;text-align:center;font-size:820px;line-height:.85;color:#fff">CES</div>
-      <div class="abs hid cj" style="left:560px;top:90px"><span class="chip b lg">JAN</span></div>
-      <div class="abs hid cv" style="left:1010px;top:90px"><span class="chip k lg">LAS VEGAS</span></div>
+      <div class="abs ces disp hid" style="left:0;right:0;top:200px;text-align:center;font-size:820px;line-height:.85;color:#fff">CES</div>
+      <div class="abs hid cj" style="left:560px;top:56px"><span class="chip b lg">JAN</span></div>
+      <div class="abs hid cv" style="left:1010px;top:56px"><span class="chip k lg">LAS VEGAS</span></div>
       <div class="abs hid tag6" style="left:1280px;top:-20px;transform-origin:50% 0"><i style="display:block;width:6px;height:260px;background:#8fa3c7;margin:0 auto"></i><div style="width:260px;height:170px;border-radius:20px;background:var(--green);border:6px solid #fff;display:flex;align-items:center;justify-content:center;color:var(--navy-deep);font:900 150px var(--display);margin-left:-127px;margin-top:-6px;box-shadow:8px 8px 0 var(--blue-bright)">$$$</div></div>
       ${Array.from({ length: 9 }, (_, i) => `<div class="abs hid sd" style="left:${160 + i * 190}px;top:900px;width:96px;height:96px;border-radius:50%;background:var(--green);border:4px solid var(--navy-deep);display:flex;align-items:center;justify-content:center;font:900 64px var(--display);color:var(--navy-deep)">$</div>`).join('')}
       ${Array.from({ length: 16 }, () => `<div class="abs card tk hid" style="left:${Math.round(rnd(900, 1500))}px;top:0;width:300px;height:150px;--sh:6px;display:flex;align-items:center;justify-content:center;gap:14px;color:var(--blue-bright);font:900 54px var(--display);letter-spacing:.1em">${ico('ticket', 64)}<span style="color:var(--navy-deep)">ENTRY</span></div>`).join('')}
@@ -744,10 +744,10 @@
         <div class="tot hid" style="display:flex;justify-content:space-between;align-items:center;margin-top:14px;background:var(--navy-deep);color:#fff;border-radius:12px;padding:10px 20px"><span class="disp" style="font-size:44px;letter-spacing:.08em">TOTAL</span><b class="disp" style="font-size:54px;color:var(--green)">ADDING UP…</b></div></div></div>
       <div class="abs hid sto" style="left:90px;top:975px;display:flex;gap:22px"><span class="chip k" style="font-size:42px;height:76px">App Store</span><span class="chip k" style="font-size:42px;height:76px">Google Play</span></div>
       <div class="abs hid hrt" style="left:1150px;top:300px;width:500px;height:500px;color:var(--red)">${ico('heart', 480, 'currentColor', 1.4)}<i class="abs hsl" style="left:20px;top:230px;width:440px;height:26px;background:var(--red);border:4px solid #fff;border-radius:14px;transform:rotate(-38deg)"></i></div>
-      <svg class="abs hid gg" style="left:900px;top:240px" width="960" height="620" viewBox="0 0 960 620">
+      <svg class="abs hid gg" style="left:900px;top:240px" width="960" height="700" viewBox="0 0 960 700">
         <path d="M60 540 A420 420 0 0 1 900 540" fill="none" stroke="#1b2e57" stroke-width="64" stroke-linecap="round"/>
         <path class="ga" d="M60 540 A420 420 0 0 1 900 540" fill="none" stroke="#27c947" stroke-width="64" stroke-linecap="round" pathLength="1000" stroke-dasharray="1000" stroke-dashoffset="1000"/>
-        <text x="46" y="610" font-size="80" style="font-weight:900" fill="#8fa3c7">E</text><text x="880" y="610" font-size="80" style="font-weight:900" fill="#27c947">F</text>
+        <text x="60" y="672" text-anchor="middle" font-size="76" style="font-weight:900" fill="#8fa3c7">E</text><text x="900" y="672" text-anchor="middle" font-size="76" style="font-weight:900" fill="#27c947">F</text>
         <line class="ndl" x1="480" y1="540" x2="110" y2="540" stroke="#fff" stroke-width="16" stroke-linecap="round"/><circle cx="480" cy="540" r="40" fill="#fff" stroke="#07152b" stroke-width="8"/></svg>
       <div class="abs hid rk6" style="left:1300px;top:400px;color:#fff;background:var(--blue-bright);border:6px solid #fff;border-radius:50%;width:300px;height:300px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 120px rgba(18,104,255,.8)">${ico('rocket', 190, 'currentColor', 1.6)}</div>
       <div class="abs hid tr6" style="left:1190px;top:180px;color:#f5b301">${ico('trophy', 220, 'currentColor', 1.5)}</div>`,
@@ -806,7 +806,7 @@
           .to(el._g, { v: .5, duration: 1.6, ease: 'power2.inOut', onUpdate: el._setG }, 1.1)
           .to(el._g, { v: .54, duration: .35, yoyo: true, repeat: 3, ease: 'sine.inOut', onUpdate: el._setG }, 2.7); return tl; }, 2.2),
       bt('S', 'Every dollar goes straight into launching and winning.', el => { const tl = T(), r = $('.rk6', el);
-        tl.to(el._g, { v: 1, duration: 1.4, ease: 'power3.in', onUpdate: el._setG }, 0)
+        tl.set($$('.tk,.nd,.sd,.coin,.ces,.cj,.cv,.tag6', el), { autoAlpha: 0 }, 0).to(el._g, { v: 1, duration: 1.4, ease: 'power3.in', onUpdate: el._setG }, 0)
           .to(el._g, { v: .96, duration: .25, ease: 'sine.out', onUpdate: el._setG }, 1.4).to(el._g, { v: 1, duration: .25, ease: 'sine.in', onUpdate: el._setG }, 1.65)
           .call(() => burstAt($('.gg', el), 100), null, 1.5)
           .fromTo(r, { scale: .3, autoAlpha: 0, y: 300 }, { scale: 1, autoAlpha: 1, y: 0, duration: .7, ease: 'back.out(2)' }, 2)
