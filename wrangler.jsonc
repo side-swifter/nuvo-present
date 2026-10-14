@@ -1,0 +1,7 @@
+{
+  // Static site deployed to Cloudflare Workers (Static Assets). Set CLOUDFLARE_ACCOUNT_ID in your shell before `npx wrangler deploy`.
+  "name": "nuvo-present",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./presentation" },
+  "routes": [{ "pattern": "present.getnuvo.net", "custom_domain": true }]
+}

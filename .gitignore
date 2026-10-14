@@ -1,0 +1,10 @@
+# Only the deck is published. Everything else in this folder (raw footage, logos, PDFs, animation frames) stays local.
+/*
+!/presentation
+!/docs
+!/README.md
+!/wrangler.jsonc
+!/.gitignore
+.DS_Store
+node_modules
+.wrangler

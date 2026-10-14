@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Nuvo — Present</title>
+<link rel="icon" href="assets/img/icon.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<style>
+  :root{--navy:#07152b;--blue:#1268ff;--blue-d:#0755dd;--green:#27c947;--bg:#f6f8ff;--muted:#5a6b82;--line:#d7e0f1;
+    --display:"Barlow Condensed","Arial Narrow",sans-serif;--body:"Barlow",system-ui,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{min-height:100vh;background:var(--bg);color:#0c1320;font-family:var(--body);padding:clamp(20px,5vw,64px);
+    background-image:radial-gradient(rgba(10,26,51,.10) 1.6px,transparent 1.8px);background-size:34px 34px}
+  .wrap{max-width:1180px;margin:0 auto}
+  header{display:flex;align-items:center;gap:18px;margin-bottom:clamp(24px,4vw,44px);flex-wrap:wrap}
+  header img{width:72px;height:72px;border-radius:19px;border:3px solid var(--navy);box-shadow:5px 5px 0 var(--navy)}
+  h1{font:900 clamp(52px,8vw,104px)/.88 var(--display);text-transform:uppercase}
+  h1 em{font-style:normal;display:inline-block;background:var(--blue);color:#fff;padding:0 .14em .02em;border-radius:.14em;box-shadow:.05em .06em 0 var(--navy);transform:rotate(-1.5deg)}
+  .lead{font-size:clamp(17px,2vw,21px);color:var(--muted);max-width:640px;line-height:1.4;margin:-8px 0 clamp(24px,4vw,40px)}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(22px,3vw,34px);align-items:stretch}
+  .card{display:flex;flex-direction:column;background:#fff;border:3px solid var(--navy);border-radius:18px;box-shadow:10px 10px 0 var(--navy);overflow:hidden}
+  .card.hero{box-shadow:10px 10px 0 var(--blue)}
+  .thumb{aspect-ratio:16/9;background:#e8f1fd center/cover no-repeat;border-bottom:3px solid var(--navy);position:relative}
+  .thumb .badge{position:absolute;left:14px;top:14px;background:var(--navy);color:#fff;border-radius:999px;padding:3px 14px;font:800 20px var(--display);letter-spacing:.12em;text-transform:uppercase}
+  .body{display:flex;flex-direction:column;gap:12px;padding:22px 24px 26px;flex:1}
+  .tags{display:flex;gap:8px;flex-wrap:wrap}
+  .tag{font:800 18px var(--display);letter-spacing:.12em;text-transform:uppercase;border:2px solid var(--navy);border-radius:999px;padding:2px 12px;color:var(--navy)}
+  .tag.g{background:var(--green);border-color:var(--navy)}
+  h2{font:900 clamp(38px,4.6vw,52px)/.92 var(--display);text-transform:uppercase}
+  p{font-size:18px;line-height:1.4;color:var(--muted)}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 26px;border-radius:999px;border:3px solid var(--navy);background:#fff;color:var(--navy);
+    font:800 26px var(--display);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;box-shadow:4px 4px 0 var(--navy);transition:transform .15s,box-shadow .15s,background .15s}
+  .btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--navy)}
+  .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--navy)}
+  .btn:focus-visible{outline:4px solid var(--blue);outline-offset:3px}
+  .btn.p{background:var(--blue);color:#fff}
+  .panel .nvs h4{font-size:28px}
+  .btn small{font:700 16px var(--body);letter-spacing:0;opacity:.8;text-transform:none}
+  .card.ghost{align-self:start;background:transparent;border-style:dashed;box-shadow:none;justify-content:center;align-items:flex-start;padding:26px 24px;gap:10px;color:var(--muted)}
+  .card.ghost h2{color:#7a8aa3}
+
+  .help{margin-top:clamp(34px,5vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(22px,3vw,34px)}
+  .panel{background:#fff;border:3px solid var(--navy);border-radius:18px;padding:22px 24px}
+  .panel h3{font:900 32px var(--display);text-transform:uppercase;margin-bottom:12px}
+  .steps{list-style:none;counter-reset:s;display:flex;flex-direction:column;gap:10px}
+  .steps li{counter-increment:s;position:relative;padding-left:42px;font-size:18px;line-height:1.6;color:#2b3a52}
+  .steps li:before{content:counter(s);position:absolute;left:0;top:2px;width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font:900 20px/30px var(--display);text-align:center}
+  .keys{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;font-size:18px;color:#2b3a52;align-items:center}
+  kbd{font:800 20px var(--display);background:#e8eefc;border:2px solid var(--line);border-bottom-width:4px;border-radius:8px;padding:0 10px;min-width:34px;text-align:center;display:inline-block;color:var(--navy)}
+  footer{margin-top:34px;font-size:15px;color:#7a8aa3}
+  @media (max-width:520px){.btn{flex:1}.card{box-shadow:6px 6px 0 var(--navy)}.card.hero{box-shadow:6px 6px 0 var(--blue)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><img src="assets/img/icon.png" alt=""><h1>Nuvo <em>present</em></h1></header>
+  <p class="lead">Pick a deck, then pick how you want to run it. Practice is for rehearsing together. Present is the clean audience view.</p>
+
+  <main class="grid">
+    <article class="card hero">
+      <div class="thumb" style="background-image:url(assets/img/thumb-keynote.jpg)"><span class="badge">≈ 3:00</span></div>
+      <div class="body">
+        <div class="tags"><span class="tag g">Recommended</span><span class="tag">TES 2026</span><span class="tag">Akaash + Shaurya</span></div>
+        <h2>Keynote deck</h2>
+        <p>Runs itself to your script with a visual for every line. <b>Practice</b> shows whose turn it is. <b>Run-through</b> shows the full script beside the slides. <b>Present</b> shows only the show.</p>
+        <div class="actions">
+          <a class="btn p" href="tes-keynote.html?mode=practice">Practice</a>
+          <a class="btn" href="tes-keynote.html?mode=run">Run-through</a>
+          <a class="btn" href="tes-keynote.html?mode=present">Present</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb" style="background-image:url(assets/img/thumb-readable.jpg)"><span class="badge">Backup</span></div>
+      <div class="body">
+        <div class="tags"><span class="tag">TES 2026</span><span class="tag">Click through</span></div>
+        <h2>Readable slides</h2>
+        <p>Rubric-style slides (Problem, Solution, Proof, Ask) with the key points written out. Use it if the keynote deck can't run.</p>
+        <div class="actions"><a class="btn" href="tes-readable.html">Open</a></div>
+      </div>
+    </article>
+
+    <article class="card ghost">
+      <h2>Need another?</h2>
+      <p>A different event, audience or length. Ask Claude and it gets added here.</p>
+    </article>
+  </main>
+
+  <section class="help">
+    <div class="panel" id="settings"><h3>Settings</h3><p style="margin-bottom:14px">Set these before you present. They are saved on this computer and used by the deck.</p><div id="sbox"></div></div>
+    <div class="panel">
+      <h3>Before you go on stage</h3>
+      <ol class="steps">
+        <li>Open the deck in <b>Chrome</b> and press <kbd>F</kbd> for fullscreen on the projector screen.</li>
+        <li>Press <kbd>P</kbd> to open the presenter window and drag it to your laptop screen.</li>
+        <li>Press <kbd>→</kbd> once you start talking (after the countdown it plays by itself). Press <kbd>S</kbd> in the deck for settings.</li>
+        <li>Run <b>Practice</b> at least twice, then adjust the pace with <kbd>+</kbd> <kbd>−</kbd>.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Keys (keynote deck)</h3>
+      <div class="keys">
+        <kbd>→</kbd><span>Next beat now, and re-sync the clock</span>
+        <kbd>←</kbd><span>Back one beat</span>
+        <kbd>Space</kbd><span>Pause or resume the clock</span>
+        <kbd>A</kbd><span>Auto on or off</span>
+        <kbd>+ −</kbd><span>Faster or slower by 5%</span>
+        <kbd>M</kbd><span>Cycle present, practice, run-through</span>
+        <kbd>S</kbd><span>Settings (speed, countdown, effects)</span>
+        <kbd>B</kbd><span>Blackout the screen</span>
+      </div>
+    </div>
+  </section>
+  <footer>present.getnuvo.net · not indexed by search engines</footer>
+</div>
+<script src="assets/settings.js?v=10"></script>
+<script>NuvoSettings.render(document.getElementById('sbox'));</script>
+</body>
+</html>
