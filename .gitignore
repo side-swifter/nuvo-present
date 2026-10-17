@@ -3,6 +3,7 @@
 !/presentation
 !/docs
 !/README.md
+!/package.json
 !/wrangler.jsonc
 !/.gitignore
 .DS_Store
