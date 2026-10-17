@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Nuvo Capitol Keynote Preview</title>
+<link rel="icon" href="assets/img/icon.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=2">
+<style>
+  :root {
+    --ink:#030712;
+    --navy:#07152b;
+    --blue:#1268ff;
+    --blue2:#4b8dff;
+    --green:#36dc6a;
+    --white:#f8fbff;
+    --muted:#a8b5c9;
+    --display:"Barlow Condensed","Arial Narrow",sans-serif;
+    --body:"Barlow",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{width:100%;height:100%;margin:0;overflow:hidden;background:var(--ink);color:var(--white);font-family:var(--body)}
+  body{cursor:none}
+  body.controls-visible{cursor:default}
+  .deck{position:fixed;inset:0;background:
+    radial-gradient(circle at 74% 38%,rgba(18,104,255,.14),transparent 34%),
+    linear-gradient(135deg,#02050c 0%,#07142a 65%,#02050c 100%)}
+  .deck:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.16;mix-blend-mode:screen;
+    background-image:radial-gradient(rgba(255,255,255,.16) .7px,transparent .8px);background-size:10px 10px}
+  .beat{position:absolute;inset:0;display:grid;place-items:center;padding:clamp(42px,6vw,112px);opacity:0;visibility:hidden;z-index:1}
+  .beat.active{visibility:visible;z-index:2}
+  .center{width:min(1660px,100%);text-align:center;position:relative;z-index:2}
+  .left{width:min(1660px,100%);text-align:left;position:relative;z-index:2}
+  .eyebrow{font:700 clamp(20px,2vw,34px)/1 var(--display);letter-spacing:.22em;text-transform:uppercase;color:var(--blue2);margin-bottom:26px}
+  .mega{font:900 clamp(96px,13vw,260px)/.78 var(--display);letter-spacing:-.04em;text-transform:uppercase;margin:0;text-wrap:balance}
+  .hero{font:900 clamp(72px,10vw,188px)/.84 var(--display);letter-spacing:-.035em;text-transform:uppercase;margin:0;text-wrap:balance}
+  .large{font:800 clamp(54px,7vw,126px)/.9 var(--display);letter-spacing:-.025em;text-transform:uppercase;margin:0;text-wrap:balance}
+  .sentence{font:600 clamp(34px,4vw,68px)/1.08 var(--body);letter-spacing:-.025em;margin:0 auto;max-width:1300px;text-wrap:balance}
+  .muted{color:var(--muted)}
+  .blue{color:var(--blue2)}
+  .green{color:var(--green)}
+  .outline{-webkit-text-stroke:2px var(--white);color:transparent}
+  .date{font-size:clamp(102px,19vw,360px);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .calendar-beat{background:linear-gradient(180deg,rgba(2,5,12,.08),rgba(2,5,12,.34))}
+  .calendar-beat .date{letter-spacing:-.055em}
+  .date-ghosts{position:absolute;inset:0;overflow:hidden;opacity:.17}
+  .date-ghosts span{position:absolute;font:900 clamp(58px,7vw,126px)/1 var(--display);letter-spacing:-.03em;color:#9abfff;white-space:nowrap}
+  .date-ghosts span:nth-child(1){left:2%;top:12%;transform:rotate(-7deg)}
+  .date-ghosts span:nth-child(2){right:-2%;top:16%;transform:rotate(5deg)}
+  .date-ghosts span:nth-child(3){left:9%;bottom:9%;transform:rotate(4deg)}
+  .date-ghosts span:nth-child(4){right:8%;bottom:7%;transform:rotate(-4deg)}
+  .strike{position:relative;display:inline-block}
+  .strike:after{content:"";position:absolute;height:.085em;left:-2%;right:-2%;top:49%;background:var(--blue);transform:scaleX(0);transform-origin:left;animation:strike .7s .45s cubic-bezier(.22,1,.36,1) forwards}
+  @keyframes strike{to{transform:scaleX(1)}}
+  .name-stack{display:flex;justify-content:center;align-items:center;gap:clamp(28px,4vw,76px);flex-wrap:wrap}
+  .name-stack span{font:900 clamp(54px,7vw,124px)/.9 var(--display);letter-spacing:-.03em;text-transform:uppercase}
+  .name-stack span:not(:last-child){color:#7790b6}
+  .nuvo-word{font:900 clamp(160px,26vw,510px)/.72 var(--display);letter-spacing:-.07em;text-transform:uppercase;color:var(--white)}
+  .nuvo-word .n{color:var(--blue)}
+  .split{width:min(1680px,100%);height:100%;display:grid;grid-template-columns:minmax(0,1.03fr) minmax(340px,.72fr);gap:clamp(42px,6vw,118px);align-items:center;position:relative;z-index:2}
+  .copy{max-width:940px}
+  .app-shot{height:min(84vh,930px);width:100%;object-fit:cover;object-position:50% 12%;border-radius:40px;box-shadow:0 36px 100px rgba(0,0,0,.58),0 0 0 3px rgba(114,163,255,.25);filter:saturate(.96)}
+  .app-frame{height:min(84vh,930px);position:relative;overflow:hidden;border-radius:40px;background:#eaf0fa}
+  .app-frame:after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 2px rgba(255,255,255,.16);border-radius:40px;pointer-events:none}
+  .proof-bg{position:absolute;inset:0;background:url('assets/press/nuvo-race-detail.png') center 18%/cover no-repeat;filter:blur(3px) brightness(.27) saturate(.6);transform:scale(1.06)}
+  .proof-grid{width:min(1580px,100%);display:grid;grid-template-columns:.85fr 1.2fr;gap:clamp(40px,7vw,132px);align-items:center;position:relative;z-index:2}
+  .proof-phone{justify-self:end;height:min(82vh,885px);max-width:560px;object-fit:cover;object-position:50% 10%;border-radius:36px;box-shadow:0 40px 120px rgba(0,0,0,.55);border:2px solid rgba(255,255,255,.14)}
+  .stats{display:grid;gap:32px}
+  .stat{padding:28px 0;border-bottom:2px solid rgba(255,255,255,.18)}
+  .stat strong{display:block;font:900 clamp(88px,11vw,198px)/.72 var(--display);letter-spacing:-.05em;text-transform:uppercase}
+  .stat span{display:block;font:700 clamp(20px,2.3vw,38px)/1 var(--display);letter-spacing:.16em;text-transform:uppercase;color:#b7c7df;margin-top:18px}
+  .proof-claim{font:900 clamp(66px,8.8vw,164px)/.83 var(--display);text-transform:uppercase;letter-spacing:-.035em;max-width:1320px;text-wrap:balance}
+  .engineering{width:min(1620px,100%);display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(42px,5vw,92px);align-items:center;position:relative;z-index:2}
+  .motion-wall{height:min(70vh,760px);border-radius:36px;background:url('assets/img/thumb-keynote.jpg') 50% 50%/cover no-repeat;box-shadow:0 32px 100px rgba(0,0,0,.52);position:relative;overflow:hidden}
+  .motion-wall:after{content:"LIVE MOTION";position:absolute;left:26px;top:24px;padding:10px 18px;border-radius:99px;background:#ef3d55;color:#fff;font:800 23px var(--display);letter-spacing:.12em}
+  .code{font:500 clamp(22px,2vw,35px)/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#020611;border:1px solid rgba(126,166,235,.32);border-radius:30px;padding:clamp(30px,4vw,66px);box-shadow:0 32px 100px rgba(0,0,0,.5);overflow:hidden;color:#c9d7ec}
+  .code .dim{color:#60718e}
+  .code .hot{color:#79aaff;background:rgba(18,104,255,.15);display:inline-block;padding:0 .18em;margin-left:-.18em}
+  .code .good{color:#5fe88b}
+  .verified{background:radial-gradient(circle at 50% 45%,#47ec78 0%,#1eb94b 54%,#0a5d26 100%)}
+  .verified:after{opacity:.08}
+  .check{width:clamp(150px,16vw,260px);height:clamp(150px,16vw,260px);border-radius:50%;border:clamp(12px,1vw,20px) solid #fff;margin:0 auto 48px;position:relative;box-shadow:0 22px 80px rgba(0,0,0,.22)}
+  .check:after{content:"";position:absolute;left:27%;top:19%;width:38%;height:58%;border-right:clamp(12px,1vw,20px) solid #fff;border-bottom:clamp(12px,1vw,20px) solid #fff;transform:rotate(43deg)}
+  .callback{display:grid;gap:26px}
+  .callback .from{font:900 clamp(62px,8vw,148px)/.85 var(--display);letter-spacing:-.03em;color:#61708a;text-transform:uppercase}
+  .callback .to{font:900 clamp(88px,12vw,220px)/.8 var(--display);letter-spacing:-.04em;text-transform:uppercase;color:#fff;text-shadow:0 0 70px rgba(18,104,255,.35)}
+  .vote{max-width:1450px;margin:auto;font:800 clamp(54px,7vw,128px)/.92 var(--display);text-transform:uppercase;letter-spacing:-.025em;text-wrap:balance}
+  .brand-end{display:flex;flex-direction:column;align-items:center;gap:42px}
+  .brand-end .logo{font:900 clamp(150px,23vw,430px)/.7 var(--display);letter-spacing:-.07em;text-transform:uppercase}
+  .brand-end .logo span{color:var(--blue)}
+  .brand-end .tagline{font:800 clamp(36px,4.5vw,82px)/1 var(--display);letter-spacing:.12em;text-transform:uppercase;color:#c6d5ec}
+  .speaker{position:fixed;left:30px;bottom:28px;z-index:20;display:none;align-items:center;gap:12px;padding:10px 16px;border:1px solid rgba(255,255,255,.22);border-radius:99px;background:rgba(0,0,0,.55);backdrop-filter:blur(12px);font:800 22px var(--display);letter-spacing:.08em;text-transform:uppercase}
+  .practice .speaker{display:flex}
+  .speaker:before{content:"";width:10px;height:10px;border-radius:50%;background:var(--blue)}
+  .counter{position:fixed;right:28px;bottom:30px;z-index:20;opacity:0;transition:opacity .25s;font:700 16px var(--body);letter-spacing:.08em;color:#b5c2d6}
+  .controls-visible .counter{opacity:1}
+  .progress{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.08);z-index:20}
+  .progress span{display:block;height:100%;width:0;background:var(--blue);transition:width .45s cubic-bezier(.22,1,.36,1)}
+  .help{position:fixed;inset:auto 50% 32px auto;transform:translateX(50%);z-index:30;display:flex;gap:20px;padding:12px 20px;border-radius:99px;background:rgba(0,0,0,.68);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .25s;font:600 15px var(--body);color:#d7e2f3}
+  .controls-visible .help{opacity:1}
+  kbd{font:800 16px var(--display);color:white}
+  .flash{position:absolute;inset:0;background:var(--white);opacity:0;pointer-events:none;z-index:10}
+  @media(max-width:900px){
+    .split,.proof-grid,.engineering{grid-template-columns:1fr;gap:28px}
+    .app-frame,.motion-wall{height:42vh}.app-shot,.proof-phone{height:42vh;justify-self:center}
+    .proof-grid .stats{grid-template-columns:1fr 1fr}.proof-phone{display:none}.beat{padding:42px 28px}
+  }
+</style>
+</head>
+<body>
+<main class="deck" id="deck" aria-live="polite">
+  <section class="beat active" data-speaker="Shresh" data-duration="500">
+    <div class="center"><p class="eyebrow">Nuvo Capitol Pitch</p><h1 class="hero">Ready when<br><span class="blue">you are</span></h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="4500" data-enter=".72">
+    <div class="center"><h1 class="mega date">JANUARY 1</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="900" data-enter=".56">
+    <div class="center"><h1 class="mega date">JANUARY 2</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="850" data-enter=".53">
+    <div class="center"><h1 class="mega date">JANUARY 3</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="800" data-enter=".50">
+    <div class="center"><h1 class="mega date">JANUARY 4</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="750" data-enter=".47">
+    <div class="center"><h1 class="mega date">JANUARY 5</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="700" data-enter=".44">
+    <div class="center"><h1 class="mega date">JANUARY 6</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="650" data-enter=".41">
+    <div class="center"><h1 class="mega date">JANUARY 7</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="600" data-enter=".38">
+    <div class="center"><h1 class="mega date">JANUARY 8</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="550" data-enter=".35">
+    <div class="center"><h1 class="mega date">JANUARY 9</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="500" data-enter=".32">
+    <div class="center"><h1 class="mega date">JANUARY 10</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="450" data-enter=".29">
+    <div class="center"><h1 class="mega date">JANUARY 11</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="400" data-enter=".26">
+    <div class="center"><h1 class="mega date">JANUARY 12</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="350" data-enter=".23">
+    <div class="center"><h1 class="mega date">JANUARY 13</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="300" data-enter=".20">
+    <div class="center"><h1 class="mega date">JANUARY 14</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="260" data-enter=".18">
+    <div class="center"><h1 class="mega date">JANUARY 15</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="220" data-enter=".16">
+    <div class="center"><h1 class="mega date">JANUARY 16</h1></div>
+  </section>
+
+  <section class="beat calendar-beat" data-speaker="Shresh" data-duration="180" data-enter=".14">
+    <div class="center"><h1 class="mega date blue">JANUARY 17</h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Shresh" data-duration="5500">
+    <div class="center"><h1 class="mega">NOBODY<br>NOTICED</h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Shresh" data-duration="4800">
+    <div class="center"><h1 class="hero">NEW YEAR.<br><span class="blue">NEW YOU.</span></h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Shresh" data-duration="5200">
+    <div class="center"><h1 class="hero">NEW YEAR.<br><span class="strike">SAME PROMISE.</span><br>SAME YOU.</h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Shresh" data-duration="3300">
+    <div class="center"><p class="sentence">When progress stays private,<br><strong class="blue">quitting stays invisible.</strong></p></div>
+  </section>
+
+  <section class="beat" data-speaker="Shresh" data-duration="3200">
+    <div class="center"><p class="eyebrow">MY NAME IS</p><h1 class="mega">SHRESH<br><span class="blue">PANDA</span></h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Akshay" data-duration="2600">
+    <div class="center"><p class="eyebrow">I'M</p><h1 class="mega">AKSHAY</h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Praneeth" data-duration="4500">
+    <div class="center"><p class="eyebrow">AND I'M</p><h1 class="mega">PRANEETH</h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Praneeth" data-duration="4700">
+    <div class="center"><div class="name-stack"><span>SHRESH</span><span>AKSHAY</span><span>PRANEETH</span></div><div class="nuvo-word"><span class="n">N</span>UVO</div></div>
+  </section>
+
+  <section class="beat" data-speaker="Praneeth" data-duration="7200">
+    <div class="split">
+      <div class="copy"><p class="eyebrow">A SHARED FINISH LINE</p><h1 class="hero">A GOAL<br>BECOMES A<br><span class="blue">LIVE RACE</span></h1></div>
+      <div class="app-frame"><img class="app-shot" src="assets/press/nuvo-arena-screen.png" alt="Nuvo Arena race screen"></div>
+    </div>
+  </section>
+
+  <section class="beat" data-speaker="Praneeth" data-duration="7100">
+    <div class="split">
+      <div class="copy"><p class="eyebrow">THE LOOP</p><h1 class="large">COMPLETE THE<br>MOVEMENT</h1><p class="sentence blue" style="margin:30px 0 0">Nuvo verifies it.<br>Everyone sees the race change.</p></div>
+      <div class="motion-wall"></div>
+    </div>
+  </section>
+
+  <section class="beat" data-speaker="Praneeth" data-duration="7200">
+    <div class="center"><p class="eyebrow">THIS MORNING</p><h1 class="hero">WE TURNED<br><span class="blue">THIS ROOM</span><br>INTO THE RACE</h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Shresh" data-duration="8000">
+    <div class="proof-bg"></div>
+    <div class="proof-grid">
+      <div class="stats"><div class="stat"><strong>LIVE</strong><span>Capitol Crew Race</span></div><div class="stat"><strong class="blue">REAL</strong><span>People in this room</span></div></div>
+      <img class="proof-phone" src="assets/press/nuvo-race-detail.png" alt="Nuvo race leaderboard">
+    </div>
+  </section>
+
+  <section class="beat" data-speaker="Praneeth" data-duration="6500">
+    <div class="center"><p class="eyebrow">NOT SAMPLE NAMES. NOT STAGED NUMBERS.</p><h1 class="proof-claim">PEOPLE SITTING BESIDE YOU <span class="blue">MOVED.</span></h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Akshay" data-duration="5500">
+    <div class="engineering"><div class="motion-wall"></div><div class="copy"><p class="eyebrow">CURRENT RELEASE BUILD</p><h1 class="large">THE CAMERA<br>SEES THE<br><span class="blue">MOVEMENT</span></h1></div></div>
+  </section>
+
+  <section class="beat" data-speaker="Akshay" data-duration="9500">
+    <div class="engineering">
+      <div class="copy"><p class="eyebrow">REAL VALIDATOR CODE</p><h1 class="large">ARMS RISE.<br>FEET WIDEN.<br><span class="blue">FRAMES HOLD.</span></h1></div>
+      <pre class="code"><span class="dim">const</span> <span class="hot">jumpingJackRepDefinition</span>
+
+<span class="dim">activeCondition:</span>
+  <span class="good">wristsAboveShoulders</span>
+  <span class="good">ankleWidthToBodyWidth</span>
+
+<span class="hot">stableFrames: 3</span></pre>
+    </div>
+  </section>
+
+  <section class="beat" data-speaker="Akshay" data-duration="5500">
+    <div class="center"><p class="eyebrow">SERVER VERIFICATION SESSION</p><h1 class="hero">MOVEMENT<br>BECOMES<br><span class="blue">PROOF</span></h1></div>
+  </section>
+
+  <section class="beat verified" data-speaker="Akshay" data-duration="5600">
+    <div class="center"><div class="check"></div><h1 class="hero">MOVE<br>VERIFIED</h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Akshay" data-duration="4800">
+    <div class="center"><h1 class="hero">ONE PERSON<br><span class="blue">MOVED.</span></h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Akshay" data-duration="5000">
+    <div class="center"><div class="callback"><div class="from">NOBODY NOTICED</div><div class="to">EVERYONE SAW IT</div></div></div>
+  </section>
+
+  <section class="beat" data-speaker="Shresh" data-duration="6000">
+    <div class="center"><p class="sentence muted">January gives you a date.</p><h1 class="large" style="margin-top:30px">NUVO GIVES YOU PEOPLE<br>WHO NOTICE WHETHER<br><span class="blue">YOU RETURN.</span></h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Shresh" data-duration="5200">
+    <div class="center"><h1 class="hero">YOU JOINED.<br>YOU MOVED.<br><span class="blue">THE BOARD CHANGED.</span></h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Shresh" data-duration="6000">
+    <div class="center"><h1 class="vote">WHEN YOU VOTE, CHOOSE THE TEAM THAT MADE <span class="blue">THIS ROOM THE PROOF.</span></h1></div>
+  </section>
+
+  <section class="beat" data-speaker="Shresh" data-duration="6500">
+    <div class="center brand-end"><div class="logo"><span>N</span>UVO</div><div class="tagline">NO ONE MOVES ALONE</div></div>
+  </section>
+
+  <div class="flash" id="flash"></div>
+</main>
+
+<div class="speaker" id="speaker">SHRESH</div>
+<div class="counter" id="counter">1 / 26</div>
+<div class="progress"><span id="progress"></span></div>
+<div class="help"><span><kbd>← →</kbd> move</span><span><kbd>A</kbd> auto</span><span><kbd>F</kbd> fullscreen</span><span><kbd>R</kbd> restart</span></div>
+
+<script src="vendor/gsap.min.js"></script>
+<script>
+(() => {
+  const beats = [...document.querySelectorAll('.beat')];
+  const speaker = document.getElementById('speaker');
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  const flash = document.getElementById('flash');
+  const params = new URLSearchParams(location.search);
+  let index = 0;
+  let auto = false;
+  let timer = null;
+  let hideTimer = null;
+
+  if (params.get('mode') === 'practice') document.body.classList.add('practice');
+
+  function cueControls() {
+    document.body.classList.add('controls-visible');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => document.body.classList.remove('controls-visible'), 1500);
+  }
+
+  function animateIn(el) {
+    const targets = [...el.querySelectorAll('.eyebrow,.mega,.hero,.large,.sentence,.name-stack,.nuvo-word,.app-frame,.motion-wall,.proof-phone,.stat,.proof-claim,.code,.check,.callback,.vote,.brand-end')];
+    const enter = Number(el.dataset.enter || .72);
+    gsap.killTweensOf(targets);
+    gsap.set(targets,{opacity:0,y:36,scale:.985});
+    gsap.to(el,{opacity:1,duration:.35,ease:'power2.out'});
+    gsap.to(targets,{opacity:1,y:0,scale:1,duration:enter,stagger:.07,ease:'power3.out',delay:.08});
+    if(el.querySelector('.date-ghosts')) gsap.fromTo(el.querySelectorAll('.date-ghosts span'),{opacity:0,x:80},{opacity:1,x:0,duration:.7,stagger:.08,ease:'power3.out'});
+  }
+
+  function animatePageTurn(old,fresh) {
+    const enter = Number(fresh.dataset.enter || .5);
+    const targets = [...fresh.querySelectorAll('.mega,.eyebrow')];
+    gsap.killTweensOf([old,fresh,...targets]);
+    gsap.set(fresh,{visibility:'visible',opacity:1,clipPath:'inset(100% 0 0 0)',zIndex:4,y:0,scale:1});
+    gsap.set(targets,{opacity:1,y:Math.max(22,enter*90),scale:1.015});
+    gsap.to(fresh,{clipPath:'inset(0% 0 0 0)',duration:enter,ease:'power4.inOut'});
+    gsap.to(targets,{y:0,scale:1,duration:enter,ease:'power4.out'});
+    gsap.to(old,{y:-Math.max(24,enter*95),scale:.985,opacity:.28,duration:enter,ease:'power3.in',onComplete:()=>{
+      old.classList.remove('active');
+      gsap.set(old,{opacity:0,visibility:'hidden',y:0,scale:1,clipPath:'none',zIndex:1});
+    }});
+  }
+
+  function show(next, direction=1) {
+    next = Math.max(0,Math.min(beats.length-1,next));
+    if(next === index && beats[next].style.opacity === '1') return;
+    clearTimeout(timer);
+    const old = beats[index];
+    const fresh = beats[next];
+    const pageTurn = old && old !== fresh && old.classList.contains('calendar-beat') && fresh.classList.contains('calendar-beat');
+    if(old && old !== fresh){
+      if(!pageTurn){
+        old.classList.remove('active');
+        gsap.set(old,{opacity:0,visibility:'hidden',y:0,scale:1,clipPath:'none',zIndex:1});
+      }
+    }
+    index = next;
+    fresh.classList.add('active');
+    gsap.set(fresh,{visibility:'visible',opacity:pageTurn?1:0});
+    if(direction < 0){gsap.set(flash,{opacity:.12});gsap.to(flash,{opacity:0,duration:.22})}
+    if(pageTurn) animatePageTurn(old,fresh); else animateIn(fresh);
+    speaker.textContent = fresh.dataset.speaker || '';
+    counter.textContent = `${index+1} / ${beats.length}${auto?' · AUTO':''}`;
+    progress.style.width = `${((index+1)/beats.length)*100}%`;
+    if(auto && index < beats.length-1){
+      timer = setTimeout(() => show(index+1,1), Number(fresh.dataset.duration || 5000));
+    }
+  }
+
+  function toggleAuto(){auto=!auto;counter.textContent=`${index+1} / ${beats.length}${auto?' · AUTO':''}`;clearTimeout(timer);if(auto)timer=setTimeout(()=>show(index+1,1),Number(beats[index].dataset.duration||5000));cueControls()}
+  function full(){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}
+
+  addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown','Enter',' '].includes(e.key)){e.preventDefault();show(index+1,1)}
+    else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(index-1,-1)}
+    else if(e.key.toLowerCase()==='a')toggleAuto();
+    else if(e.key.toLowerCase()==='f')full();
+    else if(e.key.toLowerCase()==='r'){auto=false;show(0,-1)}
+    cueControls();
+  });
+  addEventListener('mousemove',cueControls);
+  addEventListener('click',e=>{if(e.clientX>innerWidth*.5)show(index+1,1);else show(index-1,-1)});
+  gsap.set(beats,{opacity:0,visibility:'hidden'});
+  index=-1;
+  show(0,1);
+  cueControls();
+})();
+</script>
+</body>
+</html>

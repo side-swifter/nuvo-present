@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Nuvo — Present</title>
 <link rel="icon" href="assets/img/icon.png">
-<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=2">
 <style>
   :root{--navy:#07152b;--blue:#1268ff;--blue-d:#0755dd;--green:#27c947;--bg:#f6f8ff;--muted:#5a6b82;--line:#d7e0f1;
     --display:"Barlow Condensed","Arial Narrow",sans-serif;--body:"Barlow",system-ui,sans-serif}
@@ -25,6 +25,12 @@
   .card{display:flex;flex-direction:column;background:#fff;border:3px solid var(--navy);border-radius:18px;box-shadow:10px 10px 0 var(--navy);overflow:hidden}
   .card.hero{box-shadow:10px 10px 0 var(--blue)}
   .thumb{aspect-ratio:16/9;background:#e8f1fd center/cover no-repeat;border-bottom:3px solid var(--navy);position:relative}
+  .thumb.capitol{display:grid;place-items:center;overflow:hidden;background:
+    radial-gradient(circle at 78% 18%,rgba(18,104,255,.55),transparent 27%),
+    linear-gradient(135deg,#020712 0%,#07152b 57%,#0b3fa5 100%)}
+  .thumb.capitol:before{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 42%,rgba(255,255,255,.08) 42.4%,transparent 43%);transform:scale(1.6)}
+  .thumb.capitol strong{position:relative;color:#fff;font:900 clamp(36px,5vw,68px)/.82 var(--display);letter-spacing:-.035em;text-align:center;text-transform:uppercase;text-shadow:0 8px 30px rgba(0,0,0,.45)}
+  .thumb.capitol strong span{display:block;color:#52a2ff;font-size:.48em;letter-spacing:.12em;margin-top:.28em}
   .thumb .badge{position:absolute;left:14px;top:14px;background:var(--navy);color:#fff;border-radius:999px;padding:3px 14px;font:800 20px var(--display);letter-spacing:.12em;text-transform:uppercase}
   .body{display:flex;flex-direction:column;gap:12px;padding:22px 24px 26px;flex:1}
   .tags{display:flex;gap:8px;flex-wrap:wrap}
@@ -63,10 +69,23 @@
 
   <main class="grid">
     <article class="card hero">
+      <div class="thumb capitol"><span class="badge">≈ 2:20</span><strong>Nobody noticed<span>Until Nuvo</span></strong></div>
+      <div class="body">
+        <div class="tags"><span class="tag g">Recommended</span><span class="tag">Capitol</span><span class="tag">Shresh + Akshay + Praneeth</span></div>
+        <h2>Capitol keynote</h2>
+        <p>The live 41-beat story built for the Capitol: emotional hook, every day from January 2 through January 17 accelerating across the screen, room proof, product demo, code proof, and Shresh's final close.</p>
+        <div class="actions">
+          <a class="btn p" href="capitol-keynote.html?mode=practice">Practice</a>
+          <a class="btn" href="capitol-keynote.html">Present</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
       <div class="thumb" style="background-image:url(assets/img/thumb-keynote.jpg)"><span class="badge">≈ 3:00</span></div>
       <div class="body">
-        <div class="tags"><span class="tag g">Recommended</span><span class="tag">TES 2026</span><span class="tag">Akaash + Shaurya</span></div>
-        <h2>Keynote deck</h2>
+        <div class="tags"><span class="tag">Archive</span><span class="tag">TES 2026</span><span class="tag">Akaash + Shaurya</span></div>
+        <h2>TES keynote</h2>
         <p>Runs itself to your script with a visual for every line. <b>Practice</b> shows whose turn it is. <b>Run-through</b> shows the full script beside the slides. <b>Present</b> shows only the show.</p>
         <div class="actions">
           <a class="btn p" href="tes-keynote.html?mode=practice">Practice</a>
@@ -88,7 +107,7 @@
 
     <article class="card ghost">
       <h2>Need another?</h2>
-      <p>A different event, audience or length. Ask Claude and it gets added here.</p>
+      <p>A different event, audience or length. Ask Codex and it gets added here.</p>
     </article>
   </main>
 
