@@ -303,7 +303,7 @@
      big moments stand out. The Energy setting (Calm / Balanced / Lively) shifts every beat down or up one level. */
   let CALMLVL = 1;
   const softVars = v => { const o = Object.assign({}, v); if (typeof o.ease === 'string' && /back|bounce|elastic/.test(o.ease)) o.ease = 'power2.out';
-    if (typeof o.duration === 'number') o.duration *= 1.3; if (typeof o.stagger === 'number') o.stagger *= 1.25; if (o.repeat > 0 && o.yoyo) o.repeat = Math.floor(o.repeat / 2); return o; };
+    if (typeof o.duration === 'number') o.duration *= 1.3; if (typeof o.stagger === 'number') o.stagger *= 1.25; if (o.repeat > 2 && o.yoyo) o.repeat = 2 * Math.floor(o.repeat / 4) + (o.repeat % 2); return o; };   // never touch short yoyos (repeat 1 = flash and back)
   const T = () => { const tl = gsap.timeline(); if (CALMLVL === 0) [['to', 1], ['from', 1], ['fromTo', 2]].forEach(([m, i]) => { const f = tl[m].bind(tl); tl[m] = (...a) => { if (a[i] && typeof a[i] === 'object') a[i] = softVars(a[i]); return f(...a); }; }); return tl; };
   const fmt = n => Math.round(n).toLocaleString('en-US');
   const countTo = (tl, el, to, at, dur, pre = '', suf = '') => { const o = { v: 0 }; tl.to(o, { v: to, duration: dur, ease: 'power3.out', onUpdate: () => { el.textContent = pre + fmt(o.v) + suf; } }, at); };
@@ -603,7 +603,7 @@
         tl.to($('.t4', el), { y: -560, scale: .35, autoAlpha: 0, duration: .8, ease: 'power3.inOut' }, 0)
           .fromTo($('.phw', el), { y: 1100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.1, ease: 'expo.out' }, .3)
           .fromTo($$('.vf', el), { scale: 1.6, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, stagger: .06, duration: .5, ease: 'back.out(2)' }, 1.3)
-          .fromTo($('.flash', el), { autoAlpha: 0 }, { autoAlpha: .9, duration: .08, yoyo: true, repeat: 1 }, 2.2); return tl; }, 3),
+          .fromTo($('.flash', el), { autoAlpha: 0 }, { autoAlpha: .9, duration: .08, yoyo: true, repeat: 1 }, 2.2).set($('.flash', el), { autoAlpha: 0 }, 2.6); return tl; }, 3),
       bt('A', 'It counts every rep and verifies it in real time.', el => { const tl = T(), v = $('video', el), cn = $('.cn', el);
         tl.call(() => { if (!ff) { v.currentTime = 0; v.play().catch(() => {}); } }, null, 0)
           .fromTo($('.cnt', el), { autoAlpha: 0, x: -80 }, { autoAlpha: 1, x: 0, duration: .6, ease: 'expo.out' }, .2);
@@ -634,20 +634,20 @@
           .fromTo($('.cl', el), { autoAlpha: 0, y: -60 }, { autoAlpha: 1, y: 0, duration: .7, ease: 'expo.out' }, 3.4)
           .to($$('.lk,.bl', el), { scale: 1.08, duration: .4, yoyo: true, repeat: 3, ease: 'sine.inOut' }, 3.8); return tl; }, 5),
       bt('S', 'Nobody else in this space has this.', el => { const tl = T();
-        tl.to($$('.phw,.vf,.lk,.bl,.cl', el), { y: 1300, rotation: () => rnd(-8, 8), duration: .9, stagger: .04, ease: 'power3.in' }, 0)
+        tl.to($$('.phw,.vf,.lk,.bl,.cl', el), { y: 1300, rotation: () => rnd(-8, 8), duration: .9, stagger: .04, ease: 'power3.in' }, 0).set($$('.vok,.cnt,.fake,.fx,.cam,.wall,.flash,.my,.t4', el), { autoAlpha: 0 }, .3)
           .call(() => { const v = $('video', el); if (v) v.pause(); }, null, .9)
           .fromTo($('.slots', el), { autoAlpha: 0 }, { autoAlpha: 1, duration: .1 }, .6)
           .fromTo($$('.slots > div', el), { y: -600, autoAlpha: 0 }, { y: 0, autoAlpha: 1, stagger: .15, duration: .9, ease: 'bounce.out' }, .6)
           .to($$('.sl', el), { opacity: .5, duration: .4, yoyo: true, repeat: 3 }, 2).call(() => burstAt($('.sl2', el), 70), null, 1.6); return tl; }, 3),
       bt('S', 'Nobody.', el => { const tl = T();
-        tl.to($('.slots', el), { y: 1300, rotation: 4, duration: .8, ease: 'power3.in' }, 0)
+        tl.to($('.slots', el), { y: 1300, rotation: 4, duration: .8, ease: 'power3.in' }, 0).set($$('.vok,.cnt,.fake,.fx,.cam,.wall,.flash,.phw,.vf,.lk,.bl,.cl', el), { autoAlpha: 0 }, 0)
           .fromTo($('.nb1', el), { scale: 3, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: .7, ease: 'expo.out' }, .6)
           .fromTo($('.nb2', el), { scale: 3, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: .7, ease: 'expo.out' }, 1.5); return tl; }, 2.4)
     ]
   });
 
   /* ============ 5 · TRACTION (1:55–2:25) ============ */
-  const PRESS = [['ABC11 News', 'abc11-nuvo-poster.jpg'], ['CBS 17', 'cbs17-studio.jpg'], ['1 Million Cups', '1-million-cups.jpg'], ['Triangle Tribune', 'tribune-panther-creek.jpg'], ['NC State Entrepalooza', 'entrepalooza-1.jpg'], ['Entrepreneur Loop', 'entrepreneur-loop-nuvo.jpg'], ['ECHO', 'echo.jpg']];
+  const PRESS = [['ABC11 News', 'abc11-nuvo-poster.jpg'], ['CBS 17', 'cbs17-team.jpg'], ['1 Million Cups', '1-million-cups.jpg'], ['Triangle Tribune', 'tribune-panther-creek.jpg'], ['NC State Entrepalooza', 'entrepalooza-1.jpg'], ['Entrepreneur Loop', 'entrepreneur-loop-nuvo.jpg'], ['ECHO', 'echo.jpg']];
   S.push({
     title: 'Traction', theme: 'light',
     html: () => `
@@ -657,12 +657,12 @@
       <div class="abs hid sp1" style="left:300px;top:-120px;width:560px;height:1500px;background:linear-gradient(180deg,rgba(18,104,255,.45),rgba(18,104,255,0));clip-path:polygon(44% 0,56% 0,100% 100%,0 100%);transform-origin:50% 0"></div>
       <div class="abs hid sp2" style="left:1060px;top:-120px;width:560px;height:1500px;background:linear-gradient(180deg,rgba(18,104,255,.45),rgba(18,104,255,0));clip-path:polygon(44% 0,56% 0,100% 100%,0 100%);transform-origin:50% 0"></div>
       <div class="abs hid eye5" style="left:760px;top:330px;width:400px;height:400px;border-radius:50%;background:#fff;border:6px solid var(--navy-deep);box-shadow:14px 14px 0 var(--navy-deep);display:flex;align-items:center;justify-content:center;color:var(--blue-bright)">${ico('eye', 260, 'currentColor', 1.6)}</div>
-      <div class="abs dt5 hid" style="left:560px;top:200px;width:800px;text-align:center"><span class="chip b lg" style="font-size:70px;height:110px;padding:0 60px">OCT</span>
-        <div class="disp" style="font-size:600px;line-height:.9;color:var(--navy-deep)">18</div>
+      <div class="abs dt5 hid" style="left:560px;top:200px;width:800px;text-align:center"><span class="chip b lg" style="font-size:70px;height:110px;padding:0 60px">END OF</span>
+        <div class="disp" style="font-size:520px;line-height:.95;color:var(--navy-deep)">OCT</div>
         <span class="chip g lg dd" style="font-size:64px;height:100px">…</span></div>
       ${PRESS.map(([n, f], i) => { const row = i < 4 ? 0 : 1, col = row ? i - 4 : i, x = row ? 360 + col * 440 : 110 + col * 440; return `
         <div class="abs card pt hid" style="left:${x}px;top:${row ? 580 : 190}px;width:400px;height:330px;overflow:hidden;--sh:8px;background:${f ? '#fff' : 'var(--blue-bright)'}">
-          ${f ? `<img src="assets/press/${f}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">` : `<div class="disp" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:150px;line-height:.85;color:#fff;text-align:center">CBS<br>17</div>`}
+          ${f ? `<img src="assets/press/${f}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% ${f.startsWith('cbs17') ? 24 : 50}%">` : `<div class="disp" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:150px;line-height:.85;color:#fff;text-align:center">CBS<br>17</div>`}
           <div class="disp" style="position:absolute;left:0;right:0;bottom:0;padding:12px 16px 10px;background:var(--navy-deep);color:#fff;font-size:38px;letter-spacing:.04em;line-height:1">${n}</div></div>`; }).join('')}
       <div class="abs tt hid" style="left:55px;top:300px;width:1810px;height:420px">
         ${Array.from({ length: 7 }, (_, i) => `<div class="abs card blk" style="left:${i * 266}px;top:0;width:200px;height:420px;background:#dfe5f0;border-color:#9fb0cf;box-shadow:none;display:flex;align-items:flex-end;justify-content:center;padding-bottom:22px;font:800 38px var(--display);letter-spacing:.12em;color:#8190a8">CLASS</div>`).join('')}
@@ -691,8 +691,8 @@
           .fromTo($('.lk5', el), { scale: .3, autoAlpha: 0, rotation: -15 }, { scale: 1, autoAlpha: 1, rotation: 0, duration: .8, ease: 'back.out(2)' }, .4)
           .fromTo($('.lkb', el), { scale: 0 }, { scale: 1, duration: .5, ease: 'back.out(4)' }, .9)
           .to($('.lkb', el), { rotation: 14, duration: .08, yoyo: true, repeat: 9 }, 1.5); return tl; }, 2.8),
-      bt('S', 'That changes October 18th.', el => { const tl = T(), dd = $('.dd', el), days = Math.ceil((new Date(2026, 9, 18, 23, 59) - Date.now()) / 864e5);
-        dd.textContent = days > 1 ? `IN ${days} DAYS` : days === 1 ? 'TOMORROW' : days === 0 ? 'TODAY' : 'LIVE NOW';
+      bt('S', 'That changes at the end of October.', el => { const tl = T(), dd = $('.dd', el), days = Math.ceil((new Date(2026, 9, 18, 23, 59) - Date.now()) / 864e5);
+        dd.textContent = 'LAUNCHING THIS MONTH';
         tl.to($('.lkb', el), { x: 500, y: -700, rotation: 360, scale: 1.5, autoAlpha: 0, duration: .8, ease: 'power3.in' }, 0).to($('.lk5', el), { y: 1300, rotation: 10, duration: .8, ease: 'power3.in' }, .5)
           .fromTo($('.dt5', el), { rotationX: -90, autoAlpha: 0, y: 200, transformPerspective: 1200 }, { rotationX: 0, autoAlpha: 1, y: 0, duration: 1, ease: 'back.out(1.5)' }, .7)
           .call(() => burstAt($('.dt5', el), 90), null, 1.5); return tl; }, 3),
@@ -836,7 +836,7 @@
         <div class="abs pS" style="left:150px;top:410px;text-align:center"><img src="assets/img/shaurya.jpg" alt="" style="width:300px;height:300px;border-radius:50%;object-fit:cover;object-position:50% 28%;border:6px solid #fff;box-shadow:12px 12px 0 var(--navy-deep);display:block"><span class="chip" style="margin-top:22px">SHAURYA</span></div>
         <div class="abs pA" style="right:150px;top:410px;text-align:center"><img src="assets/img/akaash.jpg" alt="" style="width:300px;height:300px;border-radius:50%;object-fit:cover;object-position:50% 28%;border:6px solid #fff;box-shadow:12px 12px 0 var(--navy-deep);display:block"><span class="chip" style="margin-top:22px">AKAASH</span></div>
         ${logoTile(300, 'ft')}<div class="disp fn" style="font-size:380px;line-height:.8;color:#fff">NUVO</div>
-        <div class="urls" style="display:flex;gap:22px"><span class="chip lg">getnuvo.net</span><span class="chip g lg">Launching Oct 18</span></div></div>`,
+        <div class="urls" style="display:flex;gap:22px"><span class="chip lg">getnuvo.net</span><span class="chip g lg">Launching end of Oct</span></div></div>`,
     beats: [
       bt('A', 'We stopped waiting for permission.', el => { const tl = T(), d = $('.dlg', el), cu = $('.cur', el);
         tl.fromTo(d, { scale: .6, autoAlpha: 0, y: 80 }, { scale: 1, autoAlpha: 1, y: 0, duration: .6, ease: 'back.out(1.8)' }, 0)
@@ -885,13 +885,13 @@
     'climb the leaderboard': [.9, .6], 'first to 50': [1, .3], 'first to save': [1, .3], 'you pick the battle': [.8, .9], 'it\'s strava': [1.05, .6], 'this is the app we wished': [.9, .7],
     'and this right here': [.95, .6], 'ai motion proof': [.6, 1.1], 'point your phone': [1, .4], 'it counts every rep': [1, .6], 'you can\'t fake it': [.75, .6], 'you can\'t cheat': [.75, .7],
     'and it all runs': [1.1, .5], 'nobody else in this space': [.85, .5], 'nobody.': [.5, 1.1],
-    'and we\'re clearly not': [1, .3], '1,400 people': [.8, .5], 'and we haven\'t even launched': [.85, .8], 'that changes october': [.75, 1.1],
+    'and we\'re clearly not': [1, .3], '1,400 people': [.8, .5], 'and we haven\'t even launched': [.85, .8], 'that changes at the end': [.75, 1.1],
     'and people are already': [.95, .3], 'abc11': [1.25, .1], 'plus nc state': [1.25, .6], 'all of this between': [.8, .9], 'imagine what we do': [.8, 1.1],
     'so here\'s what we need': [.9, .5], 'recognition, funding': [1.1, .6], 'and let\'s talk funding': [1.05, .4], 'in january': [1, .5], 'that costs money': [.75, .7],
     'every competition': [.95, .4], 'and just being': [1, .3], '$200 a year': [.95, .2], '$125 to get': [1, .7], 'we\'re not asking for charity': [.8, .8], 'we\'re asking for fuel': [.65, 1.1], 'every dollar goes': [1, .6],
     'we stopped waiting for permission': [.8, .9], 'we stopped waiting until': [.85, .7], 'we\'re changing how': [1, .3], 'right now': [.6, 1.1], 'we\'re nuvo': [.6, .9], 'thank you': [.6, .5]
   };
-  const HI = ['three weeks.', 'you quit because', 'nobody wants to lose', 'this is nuvo', 'ai motion proof', 'nobody.', 'that changes october', 'we\'re asking for fuel', 'we\'re nuvo', '1,400 people', 'you can\'t fake it', 'nobody else in this space'];
+  const HI = ['three weeks.', 'you quit because', 'nobody wants to lose', 'this is nuvo', 'ai motion proof', 'nobody.', 'that changes at the end', 'we\'re asking for fuel', 'we\'re nuvo', '1,400 people', 'you can\'t fake it', 'nobody else in this space'];
   const CALM = ['that\'s how long', 'we know, because', 'i\'m shaurya', 'i\'m akaash', 'and we didn\'t set out', 'here\'s the truth', 'think about it', 'every app just tracks', 'day one', 'but put your name', 'suddenly you', 'so we built it', 'three steps', 'set a goal', 'invite your crew', 'climb the leaderboard', 'first to 50', 'first to save', 'it\'s strava', 'point your phone', 'it counts every rep', 'you can\'t cheat', 'and it all runs', 'and we\'re clearly not', 'and we haven\'t even launched', 'and people are already', 'abc11', 'plus nc state', 'all of this between', 'so here\'s what we need', 'recognition, funding', 'and let\'s talk funding', 'in january', 'every competition', 'and just being', '$200 a year', '$125 to get', 'every dollar goes', 'we stopped waiting until', 'we\'re changing how', 'thank you', 'that costs money', 'imagine what we do'];
   const TARGET = 180;
   const deliv = b => { const k = b.line.replace(/[’‘]/g, "'").toLowerCase(); const key = Object.keys(DELIVERY).find(x => k.startsWith(x)); return DELIVERY[key] || [1, .35]; };

@@ -265,7 +265,7 @@
     <div class="l">
       <span class="chip b"><i></i>The proof</span>
       <div class="card big"><div class="num"><span data-count="1400" data-comma="1">0</span></div><p>People on the waitlist.<br>Before launch.</p></div>
-      <div class="launch" data-step="1"><span class="chip g" style="height:84px;font-size:50px;padding:0 40px"><i></i>Launching Oct 18</span></div>
+      <div class="launch" data-step="1"><span class="chip g" style="height:84px;font-size:50px;padding:0 40px"><i></i>Launching end of Oct</span></div>
     </div>
     <div class="wall"></div>
     <div class="card between chip b" data-step="2" style="border-radius:999px">All of this. Between classes.</div>
@@ -295,7 +295,7 @@
     <div class="brand">
       <div class="tile2"><div class="lw"><img src="assets/img/m-only.svg" alt=""><div class="dot"></div></div></div>
       <div class="bt"><h2 class="disp">We're Nuvo.</h2>
-        <div class="url"><span class="chip">getnuvo.net</span><span class="chip g">Launching Oct 18</span></div></div>
+        <div class="url"><span class="chip">getnuvo.net</span><span class="chip g">Launching end of Oct</span></div></div>
     </div>
   </section>
 </div>
@@ -316,9 +316,9 @@ document.querySelector('.strip .trk').innerHTML = (() => {
   return one + one;
 })();
 document.querySelector('.wall').innerHTML = [
-  ['ABC11 News','abc11-nuvo-poster.jpg'],['CBS 17',null],['1 Million Cups','1-million-cups.jpg'],['Triangle Tribune','tribune-panther-creek.jpg'],
+  ['ABC11 News','abc11-nuvo-poster.jpg'],['CBS 17','cbs17-team.jpg'],['1 Million Cups','1-million-cups.jpg'],['Triangle Tribune','tribune-panther-creek.jpg'],
   ['NC State Entrepalooza','entrepalooza-1.jpg'],['Entrepreneur Loop','entrepreneur-loop-nuvo.jpg'],['ECHO','echo.jpg'],['AI Tech Safari','ai-tech-safari.webp']
-].map(([n, f]) => f ? `<div class="card tile"><img src="assets/press/${f}" alt=""><div class="nm">${n}</div></div>`
+].map(([n, f]) => f ? `<div class="card tile"><img src="assets/press/${f}" alt="" style="object-position:50% ${f.startsWith('cbs17') ? 24 : 50}%"><div class="nm">${n}</div></div>`
                       : `<div class="card tile txt"><b>CBS<br>17</b></div>`).join('');
 
 (() => {
