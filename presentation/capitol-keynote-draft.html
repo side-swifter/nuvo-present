@@ -1,0 +1,939 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nuvo — Capitol keynote (engine draft)</title>
+<link rel="stylesheet" href="assets/fonts/fonts.css?v=2">
+<style>
+  :root{
+    --navy:#0a1a33; --navy-deep:#07152b; --navy-2:#102a52; --blue-bright:#1268ff; --blue:#0755dd; --blue-light:#4d94ff;
+    --green:#27c947; --red:#ec1c2b; --surface-blue:#edf5ff; --bg:#f6f8ff; --ink:#0c1320; --muted:#5a6b82;
+    --display:"Barlow Condensed","Arial Narrow",Archivo,system-ui,sans-serif; --body:"Barlow",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;font-family:var(--body);color:var(--ink);-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);transition:background .6s}
+  body[data-theme=dark]{background:var(--navy-deep);color:#fff}
+  body[data-theme=blue]{background:var(--blue-bright);color:#fff}
+  body.hide-cursor{cursor:none}
+  .dotbg{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(10,26,51,.10) 1.6px,transparent 1.8px);background-size:34px 34px}
+  body[data-theme=dark] .dotbg{background-image:radial-gradient(rgba(255,255,255,.07) 1.6px,transparent 1.8px)}
+  body[data-theme=blue] .dotbg{background-image:radial-gradient(rgba(255,255,255,.14) 1.6px,transparent 1.8px)}
+  .blob{position:fixed;border-radius:50%;z-index:0;pointer-events:none}
+  #b1{width:60vmax;height:60vmax;background:radial-gradient(circle,rgba(18,104,255,.28),transparent 65%);left:-18vmax;top:-26vmax}
+  #b2{width:55vmax;height:55vmax;background:radial-gradient(circle,rgba(77,148,255,.28),transparent 65%);right:-18vmax;bottom:-26vmax}
+  body[data-theme=dark] #b1{background:radial-gradient(circle,rgba(18,104,255,.45),transparent 65%)}
+  #amb{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+  #fx{position:fixed;inset:0;width:100%;height:100%;z-index:30;pointer-events:none}
+  #stage{position:fixed;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center;z-index:2;overflow:hidden}
+  .scene{position:absolute;inset:0}
+  .abs{position:absolute}
+  .hid{visibility:hidden;opacity:0}
+
+  .chip{display:inline-flex;align-items:center;gap:12px;height:62px;padding:0 30px;border-radius:999px;border:3px solid var(--navy-deep);background:#fff;color:var(--navy-deep);
+    font-family:var(--display);font-weight:800;font-size:32px;letter-spacing:.06em;text-transform:uppercase;box-shadow:5px 5px 0 var(--navy-deep);white-space:nowrap}
+  .chip.b{background:var(--blue-bright);color:#fff}.chip.g{background:var(--green)}.chip.r{background:var(--red);color:#fff}
+  .chip.k{background:var(--navy-deep);color:#fff;border-color:#fff;box-shadow:5px 5px 0 var(--blue-bright)}
+  .chip.lg{height:84px;font-size:52px;padding:0 44px}
+  .card{--sh:10px;--shc:var(--navy-deep);background:#fff;color:var(--ink);border:3px solid var(--navy-deep);border-radius:18px;box-shadow:var(--sh) var(--sh) 0 var(--shc)}
+  .disp{font-family:var(--display);font-weight:900;text-transform:uppercase}
+  .hl{display:inline-block;background:var(--blue-bright);color:#fff;border-radius:.16em;box-shadow:.055em .07em 0 var(--navy-deep);transform:rotate(-1.6deg);padding:0 .16em .02em}
+  .m{display:inline-block;overflow:hidden;vertical-align:top;padding:.04em .16em .2em;margin:-.04em -.16em -.2em}
+  .m>.i{display:inline-block}
+  .tile{position:relative;background:#4f93ff;border:3px solid var(--navy-deep);box-shadow:14px 14px 0 var(--navy-deep)}
+  .tile .lw{position:absolute}.tile .lw img{position:absolute;inset:0;width:100%;height:100%}
+  .tile .dt{position:absolute;left:50.6%;top:3.2%;width:20.2%;aspect-ratio:1;border-radius:50%;background:#0663ff}
+  .circ{width:140px;height:140px;border-radius:50%;background:#fff;border:3px solid var(--navy-deep);box-shadow:6px 6px 0 var(--navy-deep);display:flex;align-items:center;justify-content:center;color:var(--blue-bright)}
+  .av2 img{width:100%;height:100%;object-fit:cover;object-position:50% 28%;border-radius:50%;filter:grayscale(1) contrast(.85) brightness(1.08);opacity:.7;transition:filter .5s,opacity .5s}
+  .av2.on img{filter:none;opacity:1}
+  .av2{overflow:hidden;width:300px;height:300px;border-radius:50%;border:6px dashed #9fb0cf;background:#eef1f7;color:#9fb0cf;display:flex;align-items:center;justify-content:center}
+  .av2.on{border:6px solid var(--navy-deep);background:var(--blue-bright);color:#fff;box-shadow:12px 12px 0 var(--navy-deep)}
+  .row{position:absolute;left:0;right:0;top:0;height:92px;border:3px solid var(--navy-deep);border-radius:16px;background:#fff;color:var(--ink);display:flex;align-items:center;padding:0 22px;gap:18px;box-shadow:5px 5px 0 var(--navy-deep)}
+  .row.me{background:var(--surface-blue)}
+  .row .rk{font:900 46px var(--display);width:40px;text-align:center}
+  .row img.av{object-fit:cover;object-position:50% 25%;background:#c9d3e6}
+  .row .nm{width:150px!important}
+  .row .av{width:54px;height:54px;border-radius:50%;background:var(--navy-2);color:#fff;display:flex;align-items:center;justify-content:center;font:900 28px var(--display);flex:none}
+  .row.me .av{background:var(--blue-bright)}
+  .row .nm{font:800 36px var(--display);letter-spacing:.04em;width:120px}
+  .row .tr{flex:1;height:22px;border-radius:12px;background:#e2e8f2;overflow:hidden}
+  .row .tr i{display:block;height:100%;width:0;border-radius:12px;background:linear-gradient(90deg,var(--blue-bright),var(--blue-light))}
+  .row .sc{font:800 34px var(--display);width:60px;text-align:right}
+  .d21{display:block;width:58px;height:58px;border-radius:50%;background:var(--blue-bright);border:3px solid var(--navy-deep);visibility:hidden}
+  .phone{position:relative;border-radius:60px;background:#05070d;padding:11px;border:3px solid #26324f;box-shadow:0 0 0 3px var(--blue-bright),20px 20px 0 rgba(18,104,255,.9)}
+  .phone video{display:block;width:100%;height:100%;object-fit:cover;border-radius:48px;background:#111}
+  .phone:before{content:"";position:absolute;top:22px;left:50%;width:30%;height:26px;border-radius:20px;background:#000;transform:translateX(-50%);z-index:2}
+  svg text{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-weight:800}
+  .avc{border-radius:50%;background:var(--navy-2);color:#fff;border:4px solid #fff;display:flex;align-items:center;justify-content:center;font:900 52px var(--display)}
+
+  /* chrome */
+  .curtain{position:fixed;inset:0;z-index:40;transform:translateX(-101%);pointer-events:none}
+  #c1{background:var(--blue-bright)}#c2{background:var(--navy-deep)}
+  #progress{position:fixed;left:0;bottom:0;height:6px;width:100%;background:var(--blue-bright);transform-origin:left;transform:scaleX(0);z-index:60;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+  #hint{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:70;font:700 20px var(--display);letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--navy-deep);padding:12px 26px;border-radius:30px;opacity:0;pointer-events:none;white-space:nowrap}
+  #black{position:fixed;inset:0;background:#000;z-index:100;opacity:0;pointer-events:none;transition:opacity .35s}#black.on{opacity:1}
+  #timer{position:fixed;left:26px;bottom:26px;z-index:75;display:none;font:800 30px var(--display);letter-spacing:.06em;background:var(--navy-deep);color:#fff;padding:10px 22px;border-radius:14px}
+  #timer.on{display:block}#timer small{font-size:18px;opacity:.7;margin-left:12px}
+  #loader{position:fixed;inset:0;z-index:90;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px}
+  #loader img{width:150px;height:150px;border-radius:38px;border:3px solid var(--navy-deep);box-shadow:8px 8px 0 var(--navy-deep)}
+  #loader .bar2{width:300px;height:18px;border-radius:12px;border:3px solid var(--navy-deep);background:#fff;overflow:hidden}
+  #loader .bar2 i{display:block;height:100%;width:0;background:var(--blue-bright)}
+  /* speaker lower-third with live equalizer */
+  #speaker{position:fixed;right:34px;bottom:30px;z-index:35;display:flex;align-items:center;gap:14px;height:68px;padding:0 24px 0 10px;border-radius:999px;border:3px solid var(--navy-deep);background:#fff;color:var(--navy-deep);box-shadow:5px 5px 0 var(--navy-deep);opacity:0;transform:translateY(30px);transition:opacity .4s,transform .4s}
+  #speaker.on{opacity:1;transform:none}
+  #speaker .ini{width:48px;height:48px;border-radius:50%;background:var(--blue-bright);color:#fff;display:flex;align-items:center;justify-content:center;font:900 28px var(--display)}
+  #speaker.S .ini{background:var(--green);color:var(--navy-deep)}
+  #speaker .nm{font:800 28px var(--display);letter-spacing:.12em}
+  #speaker .eq{display:flex;align-items:center;gap:4px;height:36px}
+  #speaker .eq i{display:block;width:6px;height:100%;border-radius:3px;background:var(--blue-bright);transform-origin:center;animation:eq .7s ease-in-out infinite alternate}
+  #speaker.S .eq i{background:var(--green)}
+  #speaker .eq i:nth-child(2){animation-delay:-.2s;animation-duration:.55s}#speaker .eq i:nth-child(3){animation-delay:-.45s;animation-duration:.8s}
+  #speaker .eq i:nth-child(4){animation-delay:-.1s;animation-duration:.6s}#speaker .eq i:nth-child(5){animation-delay:-.35s;animation-duration:.75s}
+  @keyframes eq{from{transform:scaleY(.15)}to{transform:scaleY(1)}}
+  body[data-theme=dark] #speaker,body[data-theme=blue] #speaker{border-color:#fff;box-shadow:5px 5px 0 var(--blue-bright)}
+
+  /* ===== modes: present = clean audience view, practice = coaching HUD ===== */
+  #speaker{display:none!important}
+  body[data-mode=present] #progress,body[data-mode=present] #hint,body[data-mode=present] #timer,
+  body[data-mode=present] #practice,body[data-mode=present] #turn,body[data-mode=present] #frame{display:none!important}
+  body[data-mode=practice] #stage{top:calc(50% - 105px)}
+  body[data-mode=run] #stage{left:31%}
+  body.lite .blob,body.lite #amb,body.lite #fx{display:none!important}
+  body.lite .dotbg{display:none}
+  body[data-mode=practice] #hint{bottom:232px}
+  #practice{position:fixed;left:0;right:0;bottom:0;height:210px;z-index:36;background:rgba(7,21,43,.96);color:#fff;border-top:4px solid var(--blue-bright);display:grid;grid-template-columns:300px 1fr 260px;grid-template-rows:1fr 34px;align-items:center;font-family:var(--display)}
+  #practice .pl{display:flex;align-items:center;gap:16px;padding:0 24px;border-right:2px solid #1b2e57;height:100%}
+  #practice .ini{width:84px;height:84px;border-radius:50%;background:var(--blue-bright);color:#fff;display:flex;align-items:center;justify-content:center;font:900 52px var(--display);flex:none;transition:background .2s}
+  #practice.S .ini{background:var(--green);color:var(--navy-deep)}
+  #practice .who{font-size:44px;font-weight:900;letter-spacing:.08em;line-height:1}
+  #practice .sub{font-size:22px;letter-spacing:.2em;color:#8fa3c7;font-weight:800;margin-top:4px}
+  #practice .pc{padding:0 28px;height:100%;display:flex;flex-direction:column;justify-content:center;gap:10px;overflow:hidden}
+  #practice .line{font-size:44px;font-weight:700;line-height:1.08;color:#5f7499}
+  #practice .line span{transition:color .12s}#practice .line span.d{color:#fff}#practice .line span.n{color:#4d94ff}
+  #practice.S .line span.n{color:#27c947}
+  #practice .nxt{font-size:26px;color:#8fa3c7;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #practice .nxt b.A{color:#4d94ff}#practice .nxt b.S{color:#27c947}
+  #practice .pr{text-align:right;padding:0 24px;border-left:2px solid #1b2e57;height:100%;display:flex;flex-direction:column;justify-content:center}
+  #practice .cd{font-size:70px;font-weight:900;line-height:1}#practice .cd small{font-size:28px;color:#8fa3c7}
+  #practice .tm{font-size:28px;color:#8fa3c7;font-weight:800;letter-spacing:.08em;margin-top:4px}
+  #practice .tl{grid-column:1/4;position:relative;height:34px;display:flex;gap:2px;padding:0 6px 6px;align-items:stretch}
+  #practice .tl i{display:block;border-radius:3px;opacity:.55}#practice .tl i.A{background:#1268ff}#practice .tl i.S{background:#27c947}
+  #practice .tl .ph{position:absolute;top:0;bottom:4px;width:4px;background:#fff;border-radius:2px;left:0;box-shadow:0 0 12px #fff;opacity:1}
+  #practice .tl i.cur{opacity:1}
+  #turn{position:fixed;top:26px;left:50%;transform:translate(-50%,-140px);z-index:80;font:900 64px var(--display);letter-spacing:.1em;padding:10px 40px;border-radius:999px;border:4px solid #fff;color:#fff;background:var(--blue-bright);box-shadow:8px 8px 0 var(--navy-deep);transition:transform .35s cubic-bezier(.2,1.4,.4,1);white-space:nowrap}
+  #turn.S{background:var(--green);color:var(--navy-deep)}#turn.on{transform:translate(-50%,0)}
+  #frame{position:fixed;inset:0;z-index:79;pointer-events:none;border:0 solid var(--blue-bright);transition:border-width .15s,opacity .6s;opacity:0}
+  #frame.S{border-color:var(--green)}#frame.on{border-width:14px;opacity:1}
+
+  /* run-through: script panel */
+  #script{display:none;position:fixed;right:0;top:0;bottom:0;width:38%;z-index:36;background:#07152b;color:#fff;border-left:4px solid var(--blue-bright);font-family:var(--display)}
+  body[data-mode=run] #script{display:flex;flex-direction:column}
+  body[data-mode=present] #script,body[data-mode=practice] #script{display:none}
+  body[data-mode=run] #practice,body[data-mode=run] #progress{display:none!important}
+  body[data-mode=run] #hint{display:none}
+  #script .top{display:flex;justify-content:space-between;align-items:baseline;padding:14px 22px;background:#0a1a33;border-bottom:3px solid #1b2e57;font-weight:800;letter-spacing:.08em}
+  #script .cd2{font-size:40px;font-weight:900}#script .cd2 small{font-size:20px;color:#8fa3c7;margin-left:8px}#script .tm2{font-size:26px;color:#8fa3c7}
+  #script .list{flex:1;overflow:auto;padding:10px 0 40vh;scroll-behavior:smooth}
+  #script .sec{padding:18px 22px 4px;font-size:22px;letter-spacing:.2em;color:#4d94ff;font-weight:800;text-transform:uppercase}
+  #script .ln{padding:10px 22px 10px 18px;border-left:6px solid transparent;cursor:pointer;opacity:.5;transition:opacity .2s,background .2s}
+  #script .ln b{display:block;font-size:20px;letter-spacing:.2em;font-weight:900}
+  #script .ln.A b{color:#4d94ff}#script .ln.S b{color:#27c947}
+  #script .ln span{display:block;font-size:34px;line-height:1.12;font-weight:700}
+  #script .ln.cur{opacity:1;background:rgba(18,104,255,.18);border-left-color:#4d94ff}#script .ln.S.cur{background:rgba(39,201,71,.14);border-left-color:#27c947}
+  #script .ln.cur span{font-size:42px}
+  #script u{text-decoration:none;color:#6f84ab}#script u.d{color:#fff}#script u.n{color:#4d94ff}#script .ln.S u.n{color:#27c947}
+  /* countdown */
+  #count{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:85;font:900 340px/1 var(--display);color:#fff;text-shadow:0 8px 0 var(--navy-deep);-webkit-text-stroke:10px var(--navy-deep);paint-order:stroke fill;opacity:0;pointer-events:none}
+  body[data-mode=present] #count{top:auto;left:34px;bottom:30px;transform:none;font-size:70px;-webkit-text-stroke:4px var(--navy-deep);opacity:.55!important}
+  /* settings overlay */
+  #sov{position:fixed;inset:0;z-index:95;background:rgba(7,21,43,.55);display:none;align-items:center;justify-content:center;padding:20px}
+  #sov.on{display:flex}
+  #sov .panel{position:relative;background:#fff;border:3px solid var(--navy-deep);border-radius:18px;box-shadow:10px 10px 0 var(--blue-bright);width:min(560px,100%);max-height:92vh;overflow:auto;padding:26px 28px}
+  #sov h3{font:900 44px var(--display);text-transform:uppercase;margin-bottom:12px;color:var(--navy-deep)}
+  #sov .x{position:absolute;right:16px;top:12px;width:44px;height:44px;border-radius:50%;border:3px solid var(--navy-deep);background:#fff;font:900 30px/1 var(--display);cursor:pointer}
+  #sov .foot{font-size:14px;color:#5a6b82;margin-top:14px}
+
+  /* ===== keynote redesign helpers ===== */
+  .vidbg{position:absolute;inset:0;overflow:hidden}
+  .vidbg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.42) contrast(1.1);transform:scale(1.04)}
+  .vignette{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,transparent 0%,rgba(7,21,43,.55) 70%,rgba(7,21,43,.82) 100%);pointer-events:none}
+  .bigwords{position:absolute;left:0;right:0;text-align:center;font:900 180px/1 var(--display);text-transform:uppercase;letter-spacing:-.02em}
+  .bigwords .m{display:inline-block;overflow:hidden;padding:.04em .14em .18em;margin:-.04em -.14em -.18em}
+  .bigwords .i{display:inline-block}
+  .subwords{position:absolute;left:0;right:0;text-align:center;font:700 46px/1.25 var(--body);max-width:1200px;margin:0 auto;padding:0 40px;opacity:.92}
+  .ribbon{position:absolute;left:0;right:0;height:8px;background:var(--blue-bright);border-radius:4px;transform-origin:left center;transform:scaleX(0)}
+  .statbox{position:absolute;background:#fff;border:3px solid var(--navy-deep);border-radius:18px;box-shadow:10px 10px 0 var(--navy-deep);padding:28px 34px}
+  .demo-fallback{position:absolute;inset:0;background:rgba(7,21,43,.85);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none}
+  .demo-fallback.on{opacity:1;pointer-events:auto}
+  .demo-fallback .msg{background:#fff;border:3px solid var(--navy-deep);border-radius:18px;padding:28px 40px;font:800 34px var(--display);letter-spacing:.04em;box-shadow:8px 8px 0 var(--blue-bright);display:flex;align-items:center;gap:16px}
+  .glow-blue{box-shadow:0 0 80px rgba(18,104,255,.55),0 0 24px rgba(18,104,255,.35)}
+  .kicker{font:800 32px var(--display);letter-spacing:.16em;text-transform:uppercase;color:var(--blue-light)}
+  .mask-clip{overflow:hidden;display:inline-block}
+  .mask-clip>span{display:inline-block;transform:translateY(110%)}
+  .phone-frame{position:relative;border-radius:58px;background:#05070d;padding:11px;border:3px solid #26324f;box-shadow:0 0 0 3px var(--blue-bright),20px 20px 0 rgba(18,104,255,.9)}
+  .phone-frame video{display:block;width:100%;height:100%;object-fit:cover;border-radius:46px;background:#111}
+  .phone-frame:before{content:"";position:absolute;top:22px;left:50%;width:30%;height:26px;border-radius:20px;background:#000;transform:translateX(-50%);z-index:2}
+</style>
+</head>
+<body data-theme="light">
+<div class="dotbg"></div><div class="blob" id="b1"></div><div class="blob" id="b2"></div><canvas id="amb"></canvas><canvas id="fx"></canvas>
+<div id="stage"></div>
+<div id="speaker"><span class="ini">A</span><span class="nm">AKAASH</span><span class="eq"><i></i><i></i><i></i><i></i><i></i></span></div>
+<div class="curtain" id="c1"></div><div class="curtain" id="c2"></div>
+<div id="progress"></div><div id="timer"></div><div id="hint"></div><div id="black"></div>
+<div id="practice"><div class="pl"><span class="ini">A</span><div><div class="who">AKAASH</div><div class="sub">YOUR LINE</div></div></div>
+  <div class="pc"><div class="line"></div><div class="nxt"></div></div>
+  <div class="pr"><div class="cd">–</div><div class="tm">0:00 / 0:00</div></div><div class="tl"></div></div>
+<div id="turn"></div><div id="frame"></div>
+<div id="script"><div class="top"><div class="cd2"></div><div class="tm2"></div></div><div class="list"></div></div>
+<div id="count"></div>
+<div id="sov"><div class="panel"><button class="x" aria-label="Close">×</button><h3>Settings</h3><div class="box"></div><p class="foot">Saved on this computer. Press S or Esc to close.</p></div></div>
+<div id="loader"><img src="assets/img/icon.png" alt=""><div class="bar2"><i></i></div></div>
+
+<script src="assets/settings.js?v=10"></script>
+<script src="vendor/gsap.min.js"></script>
+<script>
+/*
+ * Nuvo keynote deck. See docs/ARCHITECTURE.md and docs/EDITING.md.
+ *
+ *  1. helpers / icons / background / confetti
+ *  2. scenes: S.push({ title, theme, html(), init(), beats: [ bt(who, line, run, min) ] })
+ *  3. DELIVERY table + buildSchedule(): per-line speed, pauses, per-speaker speed, 3:00 total
+ *  4. engine: mount() / show() / advance() / clock / adaptive pace
+ *  5. presenter window, practice HUD, run-through panel, settings overlay, input
+ */
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const stage = $('#stage'), rnd = gsap.utils.random;
+  const DPR = .5;                                    // ambient/confetti canvases render at half resolution (cheap), they're soft decoration
+  let ff = false;                                    // true while fast-forwarding (suppresses confetti)
+
+  /* mode: ?mode=practice | present (default). M toggles. */
+  const NS = window.NuvoSettings; let cfg = NS.get(); let LITE = cfg.perf === 'on';
+  const setLite = v => { LITE = v; document.body.classList.toggle('lite', v); };
+  const qm = (location.search.match(/[?&]mode=(\w+)/) || [])[1];
+  if (qm) cfg = NS.set({ mode: qm === 'rehearse' ? 'run' : qm });
+  let mode = cfg.mode;
+  function applyMode(m) { mode = m; document.body.dataset.mode = m; fit(); if (typeof lastWho !== 'undefined') lastWho = null; }
+  function fit() { let aw = innerWidth, ah = innerHeight; if (mode === 'practice') ah -= 210; if (mode === 'run') aw *= .62; const s = Math.min(aw / 1920, ah / 1080); stage.style.transform = `translate(-50%,-50%) scale(${s})`; }
+  addEventListener('resize', fit); document.body.dataset.mode = mode;
+
+  /* ---------- icons ---------- */
+  const IC = {
+    flag: '<path d="M5 21V4M5 4h12l-2 4 2 4H5"/>',
+    people: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.2c2.7.3 4.5 2.2 4.5 5"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
+    trophy: '<path d="M8 4h8v6a4 4 0 0 1-8 0zM8 6H4v2a4 4 0 0 0 4 4M16 6h4v2a4 4 0 0 1-4 4M12 14v4M8 21h8"/>',
+    dumbbell: '<path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"/>',
+    dollar: '<circle cx="12" cy="12" r="9"/><path d="M14.5 9c-.5-1-1.5-1.5-2.7-1.5-1.6 0-2.8.8-2.8 2.2 0 3 5.8 1.5 5.8 4.6 0 1.4-1.3 2.2-2.9 2.2-1.3 0-2.4-.6-3-1.7M12 6v1.5M12 16.5V18"/>',
+    book: '<path d="M4 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4zM20 4h-6a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h6z"/>',
+    moon: '<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/>',
+    bolt: '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+    lock: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+    cloud: '<path d="M7 18a4 4 0 0 1-.5-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9z"/>',
+    camera: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7"/>',
+    x: '<path d="M6 6l12 12M18 6L6 18"/>',
+    star: '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+    compass: '<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+    network: '<circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M12 7.5v4M10.5 12.5L6.5 16M13.5 12.5l4 3.5"/>',
+    ticket: '<path d="M3 7h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4zM14 7v12"/>',
+    flame: '<path d="M12 3c1 3 4 4.5 4 8.5a4 4 0 0 1-8 0c0-1.5.6-2.6 1.4-3.5.2 1.2.9 1.8 1.6 2C11 7.5 11 5 12 3z"/>',
+    run: '<circle cx="14" cy="4.5" r="2"/><path d="M8 21l3-6 3 2 1 4M11 15l-1-4 4-3 3 3h3M10 11L7 13"/>',
+    building: '<path d="M4 21V8l8-4v17M12 21V10l8 3v8M2 21h20M8 10h.01M8 14h.01M8 18h.01M16 16h.01M16 19h.01"/>',
+    eye: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+    heart: '<path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z"/>',
+    rocket: '<path d="M12 2c3 2 5 6 5 10l-2 3H9l-2-3c0-4 2-8 5-10zM9 15l-3 5 4-2M15 15l3 5-4-2"/><circle cx="12" cy="9.5" r="1.4"/>',
+    mute: '<path d="M11 5L6 9H2v6h4l5 4zM23 9l-6 6M17 9l6 6"/>',
+    shield: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>'
+  };
+  const ico = (n, s = 64, c = 'currentColor', sw = 2) => `<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="${c}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
+  const logoTile = (s, cls = '') => `<div class="tile ${cls}" style="width:${s}px;height:${s}px;border-radius:${s * .25}px"><div class="lw" style="width:${s * .79}px;height:${s * .756}px;left:50%;top:50%;margin:${-s * .378}px 0 0 ${-s * .395}px"><img class="mm" src="assets/img/m-only.svg" alt=""><div class="dt"></div></div></div>`;
+
+  /* ---------- ambient background (always moving) ---------- */
+  const amb = $('#amb'), ax = amb.getContext('2d'); let AW, AH, boost = 0; const shapes = [], pulses = [];
+  const asize = () => { AW = amb.width = innerWidth * DPR; AH = amb.height = innerHeight * DPR; };
+  addEventListener('resize', asize); asize();
+  for (let i = 0; i < 16; i++) shapes.push({ x: Math.random(), y: Math.random(), s: rnd(14, 64), r: rnd(0, 6.28), vr: rnd(-.004, .004), vx: rnd(-.00008, .00008), vy: rnd(-.00018, -.00004), t: i % 4 });
+  let ambTick = 0;
+  (function ambLoop() {
+    if (!cfg.ambient || LITE || document.hidden || (++ambTick & 1)) { amb.style.display = (!cfg.ambient || LITE) ? 'none' : ''; return requestAnimationFrame(ambLoop); } amb.style.display = '';
+    ax.clearRect(0, 0, AW, AH); boost *= .96;
+    const th = document.body.dataset.theme, col = th === 'light' ? '18,104,255' : th === 'dark' ? '77,148,255' : '255,255,255', a = th === 'light' ? .13 : .2;
+    for (const p of shapes) {
+      p.x += p.vx * (1 + boost * 14); p.y += p.vy * (1 + boost * 14); p.r += p.vr * (1 + boost * 6);
+      if (p.y < -.1) { p.y = 1.1; p.x = Math.random(); } if (p.x < -.1) p.x = 1.1; if (p.x > 1.1) p.x = -.1;
+      const x = p.x * AW, y = p.y * AH, s = p.s * DPR;
+      ax.save(); ax.translate(x, y); ax.rotate(p.r); ax.strokeStyle = `rgba(${col},${a})`; ax.fillStyle = `rgba(${col},${a * .8})`; ax.lineWidth = 4 * DPR;
+      if (p.t === 0) { ax.beginPath(); ax.arc(0, 0, s / 2, 0, 6.283); ax.stroke(); }
+      else if (p.t === 1) { ax.beginPath(); ax.roundRect(-s / 2, -s / 2, s, s, s * .28); ax.stroke(); }
+      else if (p.t === 2) { ax.beginPath(); ax.moveTo(-s / 2, 0); ax.lineTo(s / 2, 0); ax.moveTo(0, -s / 2); ax.lineTo(0, s / 2); ax.stroke(); }
+      else { ax.beginPath(); ax.arc(0, 0, s / 4, 0, 6.283); ax.fill(); }
+      ax.restore();
+    }
+    for (let i = pulses.length - 1; i >= 0; i--) {
+      const q = pulses[i]; q.r += 26 * DPR; q.l -= .018; if (q.l <= 0) { pulses.splice(i, 1); continue; }
+      ax.strokeStyle = `rgba(${col},${q.l * .35})`; ax.lineWidth = 8 * DPR; ax.beginPath(); ax.arc(AW / 2, AH / 2, q.r, 0, 6.283); ax.stroke();
+    }
+    requestAnimationFrame(ambLoop);
+  })();
+  const beatPulse = () => { boost = 1; pulses.push({ r: 40, l: 1 }); };
+
+  /* ---------- confetti ---------- */
+  const cv = $('#fx'), cx = cv.getContext('2d'); let W, H; const bits = [];
+  const size = () => { W = cv.width = innerWidth * DPR; H = cv.height = innerHeight * DPR; };
+  addEventListener('resize', size); size();
+  const COL = ['#1268ff', '#4d94ff', '#07152b', '#27c947', '#ffffff'];
+  function burst(px, py, n = 70) {
+    if (ff) return;
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 6.283, v = (Math.random() * 16 + 5) * DPR;
+      bits.push({ x: px * DPR, y: py * DPR, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 4, life: 1, r: (Math.random() * 9 + 5) * DPR, rot: Math.random() * 6, vr: (Math.random() - .5) * .4, c: COL[(Math.random() * COL.length) | 0] });
+    }
+  }
+  let fxDirty = false;
+  (function loop() {
+    if (!bits.length) { if (fxDirty) { cx.clearRect(0, 0, W, H); fxDirty = false; } return requestAnimationFrame(loop); }
+    fxDirty = true; cx.clearRect(0, 0, W, H);
+    for (let i = bits.length - 1; i >= 0; i--) {
+      const b = bits[i]; b.x += b.vx; b.y += b.vy; b.vx *= .95; b.vy = b.vy * .95 + .35; b.rot += b.vr; b.life -= .016;
+      if (b.life <= 0) { bits.splice(i, 1); continue; }
+      cx.save(); cx.translate(b.x, b.y); cx.rotate(b.rot); cx.globalAlpha = Math.min(1, b.life * 1.6); cx.fillStyle = b.c; cx.fillRect(-b.r / 2, -b.r / 4, b.r, b.r / 2); cx.restore();
+    }
+    requestAnimationFrame(loop);
+  })();
+  const burstAt = (el, n) => { if (ff || n < 90 || !cfg.confetti || LITE) return; const r = el.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2, n); };   // confetti only on the big moments
+
+  /* ---------- preload the heavy media so nothing stutters on stage ---------- */
+  const keep = [];
+  const WALL = ['aarin', 'kamran', 'jugjeev', 'george', 'kabir', 'saketh', 'sathvik'];
+  ['phone-pull.webm', 'aarin.mp4', ...WALL.map(n => `w_${n}.mp4`)].forEach(f => { const v = document.createElement('video'); v.preload = 'auto'; v.muted = true; v.src = 'assets/video/' + f; keep.push(v); });
+  const loadAll = new Promise(res => { const t0 = Date.now(); (function w() { const ok = keep[0].readyState >= 3 || Date.now() - t0 > 4000; $('#loader .bar2 i').style.width = Math.min(100, (Date.now() - t0) / 20) + '%'; ok ? res() : setTimeout(w, 80); })(); });
+  const playPhone = el => { const v = $('.pv', el); if (!v) return; const end = () => { v.currentTime = Math.max(0, (v.duration || 3.4) - .05); v.pause(); };
+    if (ff) { v.readyState >= 1 ? end() : v.addEventListener('loadedmetadata', end, { once: true }); } else { v.currentTime = 0; v.play().catch(() => {}); } };
+
+  /* ---------- helpers ---------- */
+  const T = () => gsap.timeline();
+  const fmt = n => Math.round(n).toLocaleString('en-US');
+  const countTo = (tl, el, to, at, dur, pre = '', suf = '') => { const o = { v: 0 }; tl.to(o, { v: to, duration: dur, ease: 'power3.out', onUpdate: () => { el.textContent = pre + fmt(o.v) + suf; } }, at); };
+  const words = (str, cls = '') => str.split(' ').map(w => `<span class="m"><span class="i ${cls}">${w}</span></span>`).join(' ');
+  const route = 'M 200 800 C 400 480, 520 920, 780 620 S 1120 280, 1320 520 S 1620 800, 1760 300';
+  const bt = (who, line, run, min = 1.1) => ({ who, line, run, min, words: line.split(/\s+/).length });
+  const FACE = { Y: 'akaash', M: 'shaurya', A: 'akshay' };
+  const av3 = (s = 120) => ['Y', 'M', 'A'].map((c, i) => FACE[c] ? `<img class="avc" src="assets/img/${FACE[c]}.jpg" alt="" style="width:${s}px;height:${s}px;margin-left:${i ? -s * .25 : 0}px;object-fit:cover;object-position:50% 28%">` : `<span class="avc" style="width:${s}px;height:${s}px;margin-left:${i ? -s * .25 : 0}px;font-size:${s * .42}px">${c}</span>`).join('');
+
+  const S = [];
+
+  /* ============ 0 · HUMAN HOOK (0:45) · DARK/CINEMATIC ============ */
+  S.push({
+    title: 'Human hook', theme: 'dark',
+    html: () => `
+      <div class="abs vidbg"><video class="hkVid" muted loop playsinline preload="auto" src="assets/video/kamran.mp4"></video></div>
+      <div class="abs vignette"></div>
+      <div class="abs kicker hid hkEv" style="left:0;right:0;top:80px;text-align:center;color:var(--blue-light)">Teen Entrepreneur Summit 2026</div>
+      <div class="abs bigwords hid hkL1" style="top:300px;color:#fff">${words('STARTING IS EASY')}</div>
+      <div class="abs subwords hid hkL2" style="top:540px;color:#c9d3e6">Sticking with it is the hard part.</div>
+      <div class="abs av2 hkA1 hid" style="left:460px;top:520px"><img src="assets/img/shaurya.jpg" alt=""></div>
+      <div class="abs av2 hkA2 hid" style="left:1160px;top:520px"><img src="assets/img/akaash.jpg" alt=""></div>
+      <div class="abs nmS hid" style="left:460px;width:300px;top:860px;text-align:center"><span class="chip b lg">SHAURYA</span></div>
+      <div class="abs nmA hid" style="left:1160px;width:300px;top:860px;text-align:center"><span class="chip lg">AKAASH</span></div>
+      <div class="abs hid hkLogo" style="left:50%;top:46%;margin:-230px 0 0 -230px">${logoTile(460)}</div>
+      <div class="abs ribbon hkR" style="top:686px;left:180px;right:180px;background:var(--blue-bright)"></div>`,
+    init(el) { const v = $('.hkVid', el); if (v && !ff) { v.currentTime = 0; v.play().catch(() => {}); } },
+    beats: [
+      bt('A', 'Starting is easy.', el => { const tl = T();
+        tl.fromTo($('.hkEv', el), { y: -40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .7, ease: 'expo.out' }, 0)
+          .from($$('.hkL1 .i', el), { yPercent: 120, stagger: .08, duration: .75, ease: 'expo.out' }, .6)
+          .fromTo($('.hkR', el), { scaleX: 0 }, { scaleX: 1, duration: 1.2, ease: 'power3.inOut' }, 1.2); return tl; }, 2.4),
+      bt('S', 'Sticking with it is the hard part.', el => { const tl = T();
+        tl.fromTo($('.hkL2', el), { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .7, ease: 'expo.out' }, 0)
+          .to($('.hkL1', el), { opacity: .25, duration: .8 }, .3)
+          .to($('.hkR', el), { scaleX: .42, x: 460, duration: 1, ease: 'power3.inOut' }, .4); return tl; }, 2),
+      bt('A', 'We know, because we were those people.', el => { const tl = T();
+        tl.to($$('.hkL1,.hkL2', el), { y: -80, autoAlpha: 0, duration: .6, ease: 'power3.in' }, 0)
+          .to($('.hkR', el), { opacity: .4, scaleX: .15, x: 820, duration: .9, ease: 'power3.inOut' }, .2)
+          .fromTo($$('.hkA1,.hkA2', el), { scale: .7, autoAlpha: 0, rotation: -12 }, { scale: 1, autoAlpha: 1, rotation: 0, stagger: .18, duration: .75, ease: 'back.out(1.8)' }, .5); return tl; }, 2.4),
+      bt('S', "I'm Shaurya.", el => { const tl = T();
+        tl.call(() => $('.hkA1', el).classList.add('on'), null, .1)
+          .fromTo($('.nmS', el), { y: 60, autoAlpha: 0, scale: .7 }, { y: 0, autoAlpha: 1, scale: 1, duration: .6, ease: 'back.out(2.2)' }, .1); return tl; }, 1.4),
+      bt('A', "I'm Akaash.", el => { const tl = T();
+        tl.call(() => $('.hkA2', el).classList.add('on'), null, .1)
+          .fromTo($('.nmA', el), { y: 60, autoAlpha: 0, scale: .7 }, { y: 0, autoAlpha: 1, scale: 1, duration: .6, ease: 'back.out(2.2)' }, .1); return tl; }, 1.4),
+      bt('S', 'And this is Nuvo.', el => { const tl = T(), t = $('.hkLogo', el), d = $('.hkLogo .dt', el);
+        tl.to($$('.hkA1,.hkA2,.nmS,.nmA', el), { y: 120, scale: .85, autoAlpha: 0, duration: .7, ease: 'power3.inOut' }, 0)
+          .to($('.hkR', el), { scaleX: 1, x: 0, duration: 1.1, ease: 'power3.inOut' }, .2)
+          .fromTo(t, { scale: .35, autoAlpha: 0, rotation: -14 }, { scale: 1, autoAlpha: 1, rotation: 0, duration: .9, ease: 'back.out(1.6)' }, .8)
+          .from(d, { y: -700, duration: 1, ease: 'bounce.out' }, 1.2)
+          .call(() => burstAt(d, 90), null, 2); return tl; }, 2.8)
+    ]
+  });
+
+  /* ============ 1 · THE PROBLEM (0:55) · LIGHT/EDITORIAL ============ */
+  S.push({
+    title: 'The problem', theme: 'light',
+    html: () => `
+      <div class="abs kicker hid pbK" style="left:110px;top:70px;color:var(--blue-bright)">The problem</div>
+      <div class="abs disp hid pbH" style="left:0;right:0;top:170px;text-align:center;font-size:120px;line-height:.95;color:var(--navy-deep)">You don't quit because<br>you're <span style="color:var(--red)">lazy.</span></div>
+      <i class="abs ribbon pbStrike" style="left:720px;top:295px;width:430px;height:16px;background:var(--red);transform:rotate(-2deg)"></i>
+      <div class="abs statbox hid pbCard" style="left:110px;top:460px;width:560px;height:280px">
+        <div style="font:900 120px/1 var(--display);color:var(--navy-deep)">83%</div>
+        <div style="font:800 32px var(--display);letter-spacing:.04em;color:var(--muted);margin-top:8px">ABANDON NEW GOALS<br>WITHIN ONE MONTH</div>
+        <div style="font:700 20px var(--body);color:#8190a8;margin-top:18px">Source: [verify before presenting]</div></div>
+      ${[['user', 'Going solo', 'No one sees your streak.'], ['moon', 'Motivation fades', 'Willpower is finite.'], ['trophy', 'No stakes', 'Winning alone feels empty.']].map(([n, t, s]) => `
+        <div class="abs card pbF hid" style="left:730px;top:${460 + ['user','moon','trophy'].indexOf(n) * 170}px;width:1080px;height:140px;display:flex;align-items:center;padding:0 36px;gap:28px">
+          <div class="circ" style="flex:none;width:90px;height:90px;box-shadow:none;background:var(--blue-bright);color:#fff">${ico(n, 52)}</div>
+          <div><div class="disp" style="font-size:52px;line-height:1">${t}</div><div style="font:500 26px var(--body);color:var(--muted);line-height:1.2">${s}</div></div></div>`).join('')}
+      <div class="abs hid pbEnd" style="left:0;right:0;top:930px;text-align:center;font:900 72px var(--display);color:var(--navy-deep)">You quit because you're <span style="color:var(--blue-bright)">alone.</span></div>
+      <div class="abs ribbon pbR" style="top:1020px;left:760px;right:760px;background:var(--blue-bright)"></div>`,
+    beats: [
+      bt('S', "Here's the truth nobody says out loud.", el => { const tl = T();
+        tl.fromTo($('.pbK', el), { y: -30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .6, ease: 'expo.out' }, 0)
+          .from($$('.pbH .i', el), { yPercent: 115, stagger: .06, duration: .7, ease: 'expo.out' }, .3); return tl; }, 2),
+      bt('S', "You don't quit because you're lazy.", el => { const tl = T();
+        tl.to($('.pbStrike', el), { scaleX: 1, duration: .45, ease: 'power4.out' }, .4)
+          .to($('.pbH', el), { x: '+=12', duration: .05, repeat: 5, yoyo: true }, 1); return tl; }, 2),
+      bt('S', "You quit because you're doing it alone.", el => { const tl = T();
+        tl.to($('.pbStrike', el), { scaleX: 0, transformOrigin: 'right center', duration: .3 }, 0)
+          .to($$('.pbH .i', el), { color: '#c9d3e6', duration: .5 }, .2); return tl; }, 2),
+      bt('A', 'Solo streaks fade fast.', el => { const tl = T();
+        tl.to($('.pbH', el), { y: -120, autoAlpha: 0, duration: .5 }, 0)
+          .fromTo($$('.pbF', el)[0], { x: 120, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: .7, ease: 'back.out(1.6)' }, .3); return tl; }, 1.8),
+      bt('A', 'Most new goals are abandoned within the first month.', el => { const tl = T();
+        tl.fromTo($('.pbCard', el), { y: 80, autoAlpha: 0, scale: .9 }, { y: 0, autoAlpha: 1, scale: 1, duration: .7, ease: 'back.out(1.6)' }, 0)
+          .fromTo($('.pbCard div', el)[0], { scale: 1.6 }, { scale: 1, duration: .9, ease: 'expo.out' }, .2); return tl; }, 2.6),
+      bt('S', 'But competition keeps you showing up.', el => { const tl = T();
+        tl.to($('.pbCard', el), { x: -700, autoAlpha: 0, duration: .5 }, 0)
+          .fromTo($$('.pbF', el).slice(1), { x: 120, autoAlpha: 0 }, { x: 0, autoAlpha: 1, stagger: .2, duration: .7, ease: 'back.out(1.6)' }, .2)
+          .to($('.pbR', el), { scaleX: 1, duration: .8, ease: 'power3.inOut' }, .6); return tl; }, 2.4),
+      bt('S', 'Nobody wants to lose.', el => { const tl = T();
+        tl.to($$('.pbF', el), { y: -40, opacity: .15, duration: .4 }, 0)
+          .fromTo($('.pbEnd', el), { y: 60, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .7, ease: 'expo.out' }, .3)
+          .to($('.pbR', el), { left: 180, right: 180, duration: .8, ease: 'power3.inOut' }, .3); return tl; }, 2.2)
+    ]
+  });
+
+  /* ============ 2 · NUVO REVEAL (0:40) · DARK/CINEMATIC ============ */
+  S.push({
+    title: 'Nuvo reveal', theme: 'dark',
+    html: () => `
+      <svg class="abs revRib hid" style="left:180px;top:540px" width="1560" height="20" viewBox="0 0 1560 20"><line x1="0" y1="10" x2="1560" y2="10" stroke="#1268ff" stroke-width="8" stroke-linecap="round"/></svg>
+      <div class="abs bigwords hid rev1" style="top:280px;color:#fff">${words('ANY GOAL')}</div>
+      <div class="abs bigwords hid rev2" style="top:500px;color:var(--blue-light)">${words('LIVE COMPETITION')}</div>
+      <div class="abs subwords hid rev3" style="top:730px;color:#c9d3e6">Compete on anything. With anyone.</div>
+      <div class="abs hid revLogo" style="left:50%;top:48%;margin:-250px 0 0 -250px">${logoTile(500)}</div>
+      <div class="abs disp hid revName" style="left:0;right:0;top:660px;text-align:center;font-size:420px;line-height:.8;color:#fff;letter-spacing:-.02em">NUVO</div>
+      <div class="abs ribbon revR" style="top:560px;left:180px;right:180px;background:var(--blue-bright)"></div>`,
+    beats: [
+      bt('A', 'So we built Nuvo.', el => { const tl = T();
+        tl.fromTo($('.revRib', el), { autoAlpha: 0 }, { autoAlpha: 1, duration: .01 }, 0)
+          .fromTo($('.revRib line', el), { attr: { x2: 0 } }, { attr: { x2: 1560 }, duration: 1.2, ease: 'power3.inOut' }, .2)
+          .fromTo($('.rev1', el), { autoAlpha: 0 }, { autoAlpha: 1, duration: .01 }, .9)
+          .from($$('.rev1 .i', el), { yPercent: 130, stagger: .1, duration: .75, ease: 'expo.out' }, .9); return tl; }, 2.4),
+      bt('A', 'Any goal.', el => { const tl = T();
+        tl.to($$('.rev1 .i', el), { yPercent: -130, stagger: .06, duration: .55, ease: 'power3.in' }, 0)
+          .fromTo($('.rev2', el), { autoAlpha: 0 }, { autoAlpha: 1, duration: .01 }, .35)
+          .from($$('.rev2 .i', el), { yPercent: 130, stagger: .08, duration: .75, ease: 'expo.out' }, .35)
+          .to($('.revRib line', el), { attr: { x1: 300, x2: 1260 }, duration: .8, ease: 'power3.inOut' }, .2); return tl; }, 1.8),
+      bt('S', 'With your friends.', el => { const tl = T();
+        tl.to($$('.rev2 .i', el), { yPercent: -130, stagger: .05, duration: .5, ease: 'power3.in' }, 0)
+          .to($('.rev3', el), { autoAlpha: 1, y: 0, duration: .6, ease: 'expo.out' }, .4)
+          .to($('.revRib', el), { y: 160, duration: .8, ease: 'power3.inOut' }, .2); return tl; }, 1.8),
+      bt('S', 'NUVO.', el => { const tl = T(), t = $('.revLogo', el), d = $('.revLogo .dt', el);
+        tl.to($$('.rev1,.rev2,.rev3,.revRib', el), { autoAlpha: 0, scale: .9, duration: .5, ease: 'power3.in' }, 0)
+          .fromTo(t, { scale: .25, autoAlpha: 0, rotation: -18 }, { scale: 1, autoAlpha: 1, rotation: 0, duration: .95, ease: 'back.out(1.6)' }, .45)
+          .from(d, { y: -800, duration: 1, ease: 'bounce.out' }, .9)
+          .fromTo($('.revName', el), { yPercent: 60, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: .8, ease: 'expo.out' }, .9)
+          .call(() => burstAt(t, 120), null, 1.5); return tl; }, 2.6)
+    ]
+  });
+
+  /* ============ 3 · PRODUCT WORKFLOW (0:55) · LIGHT-TO-DARK ============ */
+  const WORK = [['flag', 'Create a challenge', 'Pick a goal and a target.'], ['people', 'Invite your crew', 'Friends make it real.'], ['run', 'Move', 'Record your reps, miles, or minutes.'], ['trophy', 'See the result', 'Leaderboard updates live.']];
+  S.push({
+    title: 'Product workflow', theme: 'light',
+    html: () => `
+      <div class="abs kicker hid wfK" style="left:110px;top:70px;color:var(--blue-bright)">How it works</div>
+      <div class="abs phone-frame hid wfPh" style="left:760px;top:130px;width:400px;height:820px">
+        <video class="pv" muted playsinline preload="auto" src="assets/video/phone-pull.webm"></video></div>
+      ${WORK.map(([n, t, s], i) => `
+        <div class="abs card wfC hid" style="left:100px;top:${220 + i * 190}px;width:600px;height:160px;display:flex;align-items:center;padding:0 34px;gap:24px;opacity:${i ? 0 : 1}">
+          <div class="circ" style="flex:none;width:84px;height:84px;box-shadow:none;background:var(--blue-bright);color:#fff">${ico(n, 48)}</div>
+          <div><div class="disp" style="font-size:46px;line-height:1">${t}</div><div style="font:500 24px var(--body);color:var(--muted);line-height:1.2">${s}</div></div>
+          <div class="disp wfN" style="margin-left:auto;font-size:64px;color:#d7e0f1">0${i + 1}</div></div>`).join('')}
+      <div class="abs ribbon wfR" style="top:300px;left:700px;width:120px;height:8px;background:var(--blue-bright);transform:scaleX(0)"></div>
+      <div class="abs hid wfEnd" style="left:0;right:0;top:420px;text-align:center;font:900 180px/1 var(--display);color:#fff;opacity:0">${words('YOUR MOVE')}</div>`,
+    beats: [
+      bt('S', 'Three steps.', el => { const tl = T();
+        tl.fromTo($('.wfK', el), { y: -30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .6, ease: 'expo.out' }, 0)
+          .fromTo($('.wfPh', el), { y: 160, autoAlpha: 0, scale: .85 }, { y: 0, autoAlpha: 1, scale: 1, duration: 1, ease: 'expo.out' }, .2)
+          .call(() => playPhone(el), null, .4)
+          .fromTo($$('.wfC', el)[0], { x: -80, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: .7, ease: 'back.out(1.6)' }, .7)
+          .to($('.wfR', el), { scaleX: 1, duration: .8, ease: 'power3.out' }, .9); return tl; }, 2.4),
+      bt('S', 'Create a challenge.', el => { const tl = T(), cs = $$('.wfC', el);
+        tl.to(cs[0], { opacity: .25, duration: .4 }, 0)
+          .fromTo(cs[1], { x: -80, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: .7, ease: 'back.out(1.6)' }, .3)
+          .to($('.wfR', el), { top: 490, width: 180, duration: .7, ease: 'power3.inOut' }, .2); return tl; }, 2),
+      bt('S', 'Invite your crew.', el => { const tl = T(), cs = $$('.wfC', el);
+        tl.to([cs[0], cs[1]], { opacity: .25, duration: .4 }, 0)
+          .fromTo(cs[2], { x: -80, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: .7, ease: 'back.out(1.6)' }, .3)
+          .to($('.wfR', el), { top: 680, width: 220, duration: .7, ease: 'power3.inOut' }, .2); return tl; }, 2),
+      bt('A', 'Move.', el => { const tl = T(), cs = $$('.wfC', el);
+        tl.to([cs[0], cs[1], cs[2]], { opacity: .25, duration: .4 }, 0)
+          .fromTo(cs[3], { x: -80, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: .7, ease: 'back.out(1.6)' }, .3)
+          .to($('.wfR', el), { top: 870, width: 260, duration: .7, ease: 'power3.inOut' }, .2); return tl; }, 1.8),
+      bt('A', 'See the result.', el => { const tl = T();
+        tl.to($$('.wfC,.wfK', el), { x: -700, autoAlpha: 0, duration: .6, stagger: .05, ease: 'power3.in' }, 0)
+          .to($('.wfPh', el), { x: 460, scale: .92, duration: .9, ease: 'expo.inOut' }, .2)
+          .call(() => { document.body.dataset.theme = 'dark'; }, null, .6)
+          .fromTo($('.wfEnd', el), { scale: .8, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: .8, ease: 'expo.out' }, .7)
+          .to($('.wfR', el), { top: 560, left: 180, right: 180, width: 'auto', duration: .9, ease: 'power3.inOut' }, .5); return tl; }, 2.8),
+      bt('S', "That's the whole product.", el => { const tl = T();
+        tl.to($('.wfEnd', el), { y: -80, autoAlpha: 0, duration: .5 }, 0)
+          .to($('.wfPh', el), { y: 80, autoAlpha: 0, duration: .6, ease: 'power3.in' }, 0)
+          .to($('.wfR', el), { scaleX: .15, x: 600, opacity: .4, duration: .8, ease: 'power3.inOut' }, .2); return tl; }, 1.6)
+    ]
+  });
+
+  /* ============ 4 · AI MOTION PROOF + LIVE DEMO (1:45) · DARK/CINEMATIC ============ */
+  S.push({
+    title: 'AI Motion Proof', theme: 'dark',
+    html: () => `
+      <div class="abs bigwords hid aiT1" style="top:120px;color:#fff">${words('AI MOTION')}</div>
+      <div class="abs bigwords hid aiT2" style="top:300px;color:var(--blue-light)">${words('PROOF')}</div>
+      <div class="abs phone-frame hid aiPh" style="left:745px;top:70px;width:430px;height:940px">
+        <video class="aiVid" muted loop playsinline preload="auto" src="assets/video/aarin.mp4"></video></div>
+      <div class="abs demo-fallback aiFb">
+        <div class="msg">${ico('camera', 42)}Using recorded fallback</div></div>
+      ${[[-50, -50, 'l,t'], [430 + 20, -50, 'r,t'], [-50, 940 + 20, 'l,b'], [430 + 20, 940 + 20, 'r,b']].map(([x, y, k]) => `<i class="abs vf hid" style="left:${745 + x}px;top:${70 + y}px;width:60px;height:60px;border:10px solid var(--blue-light);border-radius:6px;${k.includes('l') ? 'border-right:0;' : 'border-left:0;'}${k.includes('t') ? 'border-bottom:0;' : 'border-top:0;'}"></i>`).join('')}
+      <div class="abs cnt hid aiCnt" style="left:100px;top:300px;width:560px;text-align:center"><div class="cn disp" style="font-size:560px;line-height:.8;color:#fff">0</div><div class="disp" style="font-size:60px;letter-spacing:.2em;color:var(--blue-light)">REPS</div></div>
+      <div class="abs vok hid aiOk" style="left:1260px;top:380px;width:420px;height:420px;border-radius:50%;background:var(--green);border:6px solid #fff;display:flex;align-items:center;justify-content:center;color:var(--navy-deep);box-shadow:0 0 120px rgba(39,201,71,.55)">${ico('check', 260, 'currentColor', 2.6)}</div>
+      <div class="abs card fake hid aiFake" style="left:110px;top:300px;width:640px;height:300px;padding:34px 40px"><div style="font:800 40px var(--display);letter-spacing:.14em;color:var(--muted)">REPS</div>
+        <div style="margin-top:14px;height:130px;border:4px solid var(--navy-deep);border-radius:16px;display:flex;align-items:center;padding:0 30px;font:900 100px var(--display)"><span class="ty"></span><i class="cr" style="width:6px;height:90px;background:var(--blue-bright);margin-left:8px"></i></div></div>
+      <div class="abs fx hid aiFx" style="left:520px;top:470px;width:260px;height:260px;border-radius:50%;background:var(--red);border:6px solid #fff;display:flex;align-items:center;justify-content:center;color:#fff">${ico('x', 170, 'currentColor', 3)}</div>
+      <div class="abs circ hid aiLock" style="left:290px;top:420px;width:260px;height:260px;color:var(--blue-bright)">${ico('lock', 150)}</div>
+      <div class="abs circ hid aiBolt" style="left:1370px;top:420px;width:260px;height:260px;color:var(--blue-bright)">${ico('bolt', 150)}</div>
+      <div class="abs hid aiWall" style="left:54px;top:240px;width:1812px;display:flex;gap:22px">${WALL.map(n => `<div class="wt" style="position:relative;width:240px;height:520px;border-radius:38px;background:#05070d;padding:8px;border:3px solid #26324f;box-shadow:0 0 0 3px var(--blue-bright),10px 10px 0 rgba(18,104,255,.9)"><video muted loop playsinline preload="auto" src="assets/video/w_${n}.mp4" style="width:100%;height:100%;object-fit:cover;border-radius:30px;display:block"></video><i class="wk" style="position:absolute;right:-16px;top:-16px;width:66px;height:66px;border-radius:50%;background:var(--green);border:4px solid #fff;display:flex;align-items:center;justify-content:center;color:var(--navy-deep)">${ico('check', 38, 'currentColor', 3.2)}</i></div>`).join('')}</div>
+      <div class="abs ribbon aiR" style="top:560px;left:180px;right:180px;background:var(--blue-bright);transform:scaleX(0)"></div>`,
+    init(el) { el._demoTried = false; },
+    beats: [
+      bt('S', 'And this is the part people do not believe two high schoolers built.', el => { const tl = T();
+        tl.fromTo($('.aiT1', el), { autoAlpha: 0 }, { autoAlpha: 1, duration: .01 }, 0)
+          .from($$('.aiT1 .i', el), { yPercent: 130, stagger: .1, duration: .8, ease: 'expo.out' }, .2)
+          .fromTo($('.aiR', el), { scaleX: 0, transformOrigin: 'left center' }, { scaleX: 1, duration: 1.1, ease: 'power3.inOut' }, .7); return tl; }, 2.8),
+      bt('S', 'AI Motion Proof.', el => { const tl = T();
+        tl.from($$('.aiT2 .i', el), { yPercent: 130, stagger: .12, duration: .8, ease: 'expo.out' }, .2)
+          .to($('.aiT2 .i', el), { color: '#4d94ff', duration: .5 }, 1.2)
+          .call(() => burstAt($('.aiT2', el), 70), null, 1); return tl; }, 2.2),
+      bt('A', 'Point your camera at yourself.', el => { const tl = T();
+        tl.to($$('.aiT1,.aiT2', el), { y: -400, autoAlpha: 0, duration: .7, ease: 'power3.in' }, 0)
+          .fromTo($('.aiPh', el), { y: 1100, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.1, ease: 'expo.out' }, .3)
+          .fromTo($$('.vf', el), { scale: 1.6, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, stagger: .06, duration: .5, ease: 'back.out(2)' }, 1.3); return tl; }, 2.6),
+      bt('A', 'It tracks your movement and counts real reps.', el => { const tl = T(), v = $('.aiVid', el), cn = $('.cn', el);
+        tl.call(() => { if (!ff) { v.currentTime = 0; v.play().catch(() => {}); } }, null, 0)
+          .fromTo($('.aiCnt', el), { autoAlpha: 0, x: -80 }, { autoAlpha: 1, x: 0, duration: .6, ease: 'expo.out' }, .2);
+        for (let i = 1; i <= 8; i++) tl.call(() => { cn.textContent = i; }, null, .3 + i * .45).fromTo(cn, { scale: 1.2 }, { scale: 1, duration: .3, ease: 'power3.out' }, .3 + i * .45);
+        tl.fromTo($('.aiOk', el), { scale: 0, autoAlpha: 0, rotation: -40 }, { scale: 1, autoAlpha: 1, rotation: 0, duration: .8, ease: 'back.out(2.4)' }, 2.2).call(() => burstAt($('.aiOk', el), 60), null, 2.5); return tl; }, 4),
+      bt('A', 'Not perfect, but real.', el => { const tl = T();
+        tl.to($$('.aiCnt,.aiOk', el), { autoAlpha: 0, x: -60, duration: .4 }, 0)
+          .fromTo($('.aiFake', el), { x: -300, autoAlpha: 0, rotation: -6 }, { x: 0, autoAlpha: 1, rotation: 0, duration: .6, ease: 'expo.out' }, .1)
+          .call(() => { $('.ty', el).textContent = ''; }, null, .5);
+        ['1', '10', '100'].forEach((t, i) => tl.call(() => { $('.ty', el).textContent = t; }, null, .7 + i * .25));
+        tl.fromTo($('.aiFx', el), { scale: 3, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: .4, ease: 'expo.out' }, 1.5)
+          .to($('.aiFake', el), { x: '+=14', duration: .05, repeat: 7, yoyo: true }, 1.7)
+          .to($$('.aiFake,.aiFx', el), { y: 1200, rotation: -12, duration: .8, ease: 'power3.in' }, 2.6); return tl; }, 3),
+      bt('S', 'So you can not just type in a number.', el => { const tl = T();
+        tl.to($('.aiPh', el), { x: 420, scale: .85, duration: .8, ease: 'power3.inOut' }, 0)
+          .fromTo($('.aiWall', el), { autoAlpha: 0 }, { autoAlpha: 1, duration: .1 }, .4)
+          .fromTo($$('.aiWall .wt', el), { y: -700, autoAlpha: 0, rotation: () => rnd(-8, 8) }, { y: 0, autoAlpha: 1, rotation: 0, stagger: .16, duration: .8, ease: 'back.out(1.5)' }, .4)
+          .call(() => { if (!ff) $$('.aiWall video', el).forEach((v, i) => { v.currentTime = i * .8; v.play().catch(() => {}); }); }, null, .6)
+          .fromTo($$('.aiWall .wk', el), { scale: 0 }, { scale: 1, stagger: .22, duration: .45, ease: 'back.out(3)' }, 1.7); return tl; }, 4.2),
+      bt('A', 'It runs on your phone. Private. Fast.', el => { const tl = T();
+        tl.to($('.aiWall', el), { y: 1200, duration: .7, ease: 'power3.in' }, 0).call(() => { $$('.aiWall video', el).forEach(v => v.pause()); }, null, .7)
+          .to($('.aiPh', el), { x: 0, scale: 1, duration: .8, ease: 'power3.out' }, .2)
+          .fromTo($('.aiLock', el), { x: -500, autoAlpha: 0, scale: .4 }, { x: 0, autoAlpha: 1, scale: 1, duration: .9, ease: 'back.out(1.8)' }, .3)
+          .fromTo($('.aiBolt', el), { x: 500, autoAlpha: 0, scale: .4 }, { x: 0, autoAlpha: 1, scale: 1, duration: .9, ease: 'back.out(1.8)' }, .3)
+          .to($$('.aiLock,.aiBolt', el), { scale: 1.08, duration: .4, yoyo: true, repeat: 3, ease: 'sine.inOut' }, 1.6); return tl; }, 3.6),
+      bt('S', 'Let me show you.', el => { const tl = T();
+        tl.to($$('.aiLock,.aiBolt,.vf', el), { autoAlpha: 0, duration: .4 }, 0)
+          .call(() => {
+            const v = $('.aiVid', el), fb = $('.aiFb', el);
+            if (el._demoTried) return;
+            el._demoTried = true;
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+              navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false })
+                .then(stream => { v.srcObject = stream; v.play().catch(() => {}); })
+                .catch(() => { fb.classList.add('on'); v.play().catch(() => {}); });
+            } else { fb.classList.add('on'); v.play().catch(() => {}); }
+          }, null, .2)
+          .fromTo($('.aiPh', el), { y: 0 }, { y: -20, duration: .6, yoyo: true, repeat: 1, ease: 'sine.inOut' }, .5); return tl; }, 3.2),
+      bt('S', 'That is the edge.', el => { const tl = T();
+        tl.to($$('.aiPh,.aiFb', el), { y: 1300, autoAlpha: 0, duration: .8, ease: 'power3.in' }, 0)
+          .call(() => { const v = $('.aiVid', el); if (v && v.srcObject) { v.srcObject.getTracks().forEach(t => t.stop()); v.srcObject = null; v.src = 'assets/video/aarin.mp4'; } }, null, .8)
+          .fromTo($('.aiR', el), { scaleX: .2, transformOrigin: 'left center' }, { scaleX: 1, duration: .9, ease: 'power3.inOut' }, .6); return tl; }, 2)
+    ]
+  });
+
+  /* ============ 5 · TRACTION AND EXECUTION (0:45) · LIGHT/EDITORIAL ============ */
+  const TRACTION_PRESS = [['ABC11 News', 'abc11-nuvo-poster.jpg'], ['CBS 17', null], ['1 Million Cups', '1-million-cups.jpg']];
+  S.push({
+    title: 'Traction', theme: 'light',
+    html: () => `
+      <canvas class="abs wl" width="1920" height="1080" style="left:0;top:0"></canvas>
+      <div class="abs kicker hid trK" style="left:110px;top:70px;color:var(--blue-bright)">The proof</div>
+      <div class="abs card cc hid" style="left:520px;top:270px;width:880px;height:540px;text-align:center;--shc:var(--blue-bright)"><div class="disp cn5" style="font-size:380px;line-height:1.05;color:var(--navy-deep)">0</div><div class="disp" style="font-size:64px;letter-spacing:.12em;color:var(--muted)">ON THE WAITLIST</div></div>
+      <div class="abs hid trDate" style="left:560px;top:240px;width:800px;text-align:center"><span class="chip b lg" style="font-size:70px;height:110px;padding:0 60px">OCT</span>
+        <div class="disp" style="font-size:600px;line-height:.9;color:var(--navy-deep)">17</div>
+        <span class="chip g lg dd" style="font-size:64px;height:100px">LAUNCH</span></div>
+      <div class="abs hid trSub" style="left:0;right:0;top:860px;text-align:center;font:700 38px var(--body);color:var(--muted)">Covered by ABC11, CBS 17, and 1 Million Cups. Built between classes.</div>
+      ${TRACTION_PRESS.map(([n, f], i) => `
+        <div class="abs card trPt hid" style="left:${150 + i * 560}px;top:540px;width:420px;height:280px;overflow:hidden;--sh:8px;background:${f ? '#fff' : 'var(--blue-bright)'}">
+          ${f ? `<img src="assets/press/${f}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">` : `<div class="disp" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:150px;line-height:.85;color:#fff;text-align:center">CBS<br>17</div>`}
+          <div class="disp" style="position:absolute;left:0;right:0;bottom:0;padding:12px 16px 10px;background:var(--navy-deep);color:#fff;font-size:38px;letter-spacing:.04em;line-height:1">${n}</div></div>`).join('')}`,
+    init(el) {
+      const c = $('.wl', el), g = c.getContext('2d');
+      const N = 1400, order = Array.from({ length: N }, (_, i) => i).sort(() => Math.random() - .5);
+      el._ws = { n: 0, dim: 1 };
+      let drawn = 0, lastDim = 1;
+      const dot = i => { const x = (i % 50) * 38 + 19, y = ((i / 50) | 0) * 38 + 19; g.moveTo(x + 9, y); g.arc(x, y, 9, 0, 6.283); };
+      el._wd = () => { const { n, dim } = el._ws, N2 = Math.floor(n);
+        if (dim !== lastDim || N2 < drawn) { g.clearRect(0, 0, 1920, 1080); drawn = 0; lastDim = dim; c.style.opacity = .92 * dim + .08; }
+        g.fillStyle = '#1268ff'; g.beginPath(); for (let k = drawn; k < N2; k++) dot(order[k]); g.fill(); drawn = Math.max(drawn, N2); };
+      el._wd();
+    },
+    beats: [
+      bt('A', 'And we are clearly not the only ones who wanted this.', el => { const tl = T();
+        tl.fromTo($('.trK', el), { y: -30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .6, ease: 'expo.out' }, 0)
+          .to(el._ws, { n: 760, duration: 2.4, ease: 'power1.in', onUpdate: () => el._wd() }, .2); return tl; }, 2.8),
+      bt('A', '1,400 people on our waitlist,', el => { const tl = T();
+        tl.to(el._ws, { n: 1400, duration: 2, ease: 'power2.out', onUpdate: () => el._wd() }, 0)
+          .fromTo($('.cc', el), { scale: .5, autoAlpha: 0, rotation: -5 }, { scale: 1, autoAlpha: 1, rotation: 0, duration: .9, ease: 'back.out(1.7)' }, .2);
+        countTo(tl, $('.cn5', el), 1400, .3, 2); tl.call(() => burstAt($('.cc', el), 100), null, 2); return tl; }, 3),
+      bt('A', 'and we have not even launched.', el => { const tl = T();
+        tl.to($('.cc', el), { y: -1500, rotation: -8, duration: .6, ease: 'power3.in' }, 0).to(el._ws, { dim: .25, duration: .6, onUpdate: () => el._wd() }, 0)
+          .fromTo($('.trDate', el), { rotationX: -90, autoAlpha: 0, y: 200, transformPerspective: 1200 }, { rotationX: 0, autoAlpha: 1, y: 0, duration: 1, ease: 'back.out(1.5)' }, .4)
+          .call(() => burstAt($('.trDate', el), 90), null, 1.3); return tl; }, 2.6),
+      bt('S', 'Covered by ABC11, CBS 17, and 1 Million Cups.', el => { const tl = T(), p = $$('.trPt', el);
+        tl.to($('.trDate', el), { y: -1500, rotation: 6, duration: .6, ease: 'power3.in' }, 0)
+          .fromTo(p, { y: 700, scale: .7, autoAlpha: 0 }, { y: 0, scale: 1, autoAlpha: 1, stagger: .2, duration: .8, ease: 'back.out(1.6)' }, .4); return tl; }, 3),
+      bt('S', 'All while we are still in school.', el => { const tl = T();
+        tl.to($$('.trPt', el), { y: 1300, rotation: () => rnd(-10, 10), stagger: .05, duration: .7, ease: 'power3.in' }, 0)
+          .fromTo($('.trSub', el), { y: 60, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .7, ease: 'expo.out' }, .4); return tl; }, 2.2)
+    ]
+  });
+
+  /* ============ 6 · THE ASK (0:45) · DARK ============ */
+  const ASK = [['compass', 'MENTORSHIP', 'Guides who have scaled consumer apps.'], ['network', 'INTRODUCTIONS', 'To partners, competitions, and early users.'], ['dollar', 'FUEL', 'For launch, CES, and real user testing.']];
+  S.push({
+    title: 'The ask', theme: 'dark',
+    html: () => `
+      <div class="abs kicker hid askK" style="left:0;right:0;top:90px;text-align:center;color:var(--blue-light)">What we need</div>
+      <div class="abs bigwords hid askH" style="top:180px;color:#fff">${words('JOIN US')}</div>
+      ${ASK.map(([n, t, s], i) => `
+        <div class="abs card askC hid" style="left:${170 + i * 560}px;top:440px;width:480px;height:460px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;--shc:var(--blue-bright)">
+          <div class="circ" style="width:150px;height:150px;box-shadow:none;background:var(--blue-bright);color:#fff">${ico(n, 88)}</div>
+          <div class="disp" style="font-size:58px;letter-spacing:.04em">${t}</div>
+          <div style="font:500 28px var(--body);color:#c9d3e6;text-align:center;max-width:360px;line-height:1.3">${s}</div></div>`).join('')}
+      <div class="abs ribbon askR" style="top:400px;left:180px;right:180px;background:var(--blue-bright);transform:scaleX(0)"></div>`,
+    beats: [
+      bt('S', "Here's what we need.", el => { const tl = T();
+        tl.fromTo($('.askK', el), { y: -30, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .6, ease: 'expo.out' }, 0)
+          .from($$('.askH .i', el), { yPercent: 130, stagger: .1, duration: .75, ease: 'expo.out' }, .3)
+          .fromTo($('.askR', el), { scaleX: 0, transformOrigin: 'left center' }, { scaleX: 1, duration: 1, ease: 'power3.inOut' }, .6); return tl; }, 2.4),
+      bt('S', 'Mentorship.', el => { const tl = T();
+        tl.fromTo($$('.askC', el)[0], { y: 120, autoAlpha: 0, scale: .9 }, { y: 0, autoAlpha: 1, scale: 1, duration: .8, ease: 'back.out(1.6)' }, 0); return tl; }, 1.6),
+      bt('S', 'Introductions.', el => { const tl = T();
+        tl.fromTo($$('.askC', el)[1], { y: 120, autoAlpha: 0, scale: .9 }, { y: 0, autoAlpha: 1, scale: 1, duration: .8, ease: 'back.out(1.6)' }, 0); return tl; }, 1.6),
+      bt('A', 'And fuel.', el => { const tl = T();
+        tl.fromTo($$('.askC', el)[2], { y: 120, autoAlpha: 0, scale: .9 }, { y: 0, autoAlpha: 1, scale: 1, duration: .8, ease: 'back.out(1.6)' }, 0)
+          .to($$('.askC .circ', el), { scale: 1.08, duration: .4, yoyo: true, repeat: 3, ease: 'sine.inOut', stagger: .1 }, 1); return tl; }, 2),
+      bt('A', 'Every dollar goes into launching and winning.', el => { const tl = T();
+        tl.to($$('.askC', el), { y: 130, autoAlpha: 0, scale: .85, duration: .6, stagger: .05, ease: 'power3.in' }, 0)
+          .to($('.askH', el), { autoAlpha: 0, duration: .4 }, 0)
+          .fromTo($('.askR', el), { left: 180, right: 180 }, { left: 760, right: 760, duration: .8, ease: 'power3.inOut' }, .4); return tl; }, 2)
+    ]
+  });
+
+  /* ============ 7 · CLOSE (0:20) · DARK/CINEMATIC ============ */
+  S.push({
+    title: 'Close', theme: 'dark',
+    html: () => `
+      <div class="abs vidbg"><video class="clVid" muted loop playsinline preload="auto" src="assets/video/kamran.mp4"></video></div>
+      <div class="abs vignette"></div>
+      <div class="abs bigwords hid clLine" style="top:360px;color:#fff">${words('KEEP SHOWING UP')}</div>
+      <div class="abs hid clLogo" style="left:50%;top:46%;margin:-230px 0 0 -230px">${logoTile(460)}</div>
+      <div class="abs hid clName" style="left:0;right:0;top:660px;text-align:center;font:900 420px/.8 var(--display);color:#fff;letter-spacing:-.02em">NUVO</div>
+      <div class="abs hid clUrl" style="left:0;right:0;top:940px;text-align:center"><span class="chip lg">getnuvo.net</span><span class="chip g lg">Launching Oct 17</span></div>
+      <div class="abs ribbon clR" style="top:560px;left:180px;right:180px;background:var(--blue-bright);transform:scaleX(0)"></div>`,
+    init(el) { const v = $('.clVid', el); if (v && !ff) { v.currentTime = 0; v.play().catch(() => {}); } },
+    beats: [
+      bt('S', 'We stopped waiting for permission.', el => { const tl = T();
+        tl.fromTo($('.clLine', el), { autoAlpha: 0 }, { autoAlpha: 1, duration: .01 }, 0)
+          .from($$('.clLine .i', el), { yPercent: 130, stagger: .08, duration: .8, ease: 'expo.out' }, .2)
+          .fromTo($('.clR', el), { scaleX: 0, transformOrigin: 'left center' }, { scaleX: 1, duration: 1.1, ease: 'power3.inOut' }, .7); return tl; }, 2.6),
+      bt('A', "We're Nuvo.", el => { const tl = T(), t = $('.clLogo', el), d = $('.clLogo .dt', el);
+        tl.to($$('.clLine', el), { y: -140, autoAlpha: 0, duration: .5 }, 0)
+          .to($('.clR', el), { top: 480, left: 760, right: 760, duration: .8, ease: 'power3.inOut' }, .2)
+          .fromTo(t, { scale: .25, autoAlpha: 0, rotation: -18 }, { scale: 1, autoAlpha: 1, rotation: 0, duration: .95, ease: 'back.out(1.6)' }, .5)
+          .from(d, { y: -800, duration: 1, ease: 'bounce.out' }, .95)
+          .fromTo($('.clName', el), { yPercent: 70, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: .8, ease: 'expo.out' }, .9)
+          .call(() => burstAt(t, 120), null, 1.6); return tl; }, 2.8),
+      bt('A', 'Thank you.', el => { const tl = T();
+        tl.to($('.clName', el), { y: -80, opacity: .35, duration: .5 }, 0)
+          .fromTo($('.clUrl', el), { y: 60, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .7, ease: 'back.out(2)' }, .2)
+          .to($('.clLogo', el), { scale: 1.04, duration: .5, yoyo: true, repeat: 5, ease: 'sine.inOut' }, .5); return tl; }, 2.2)
+    ]
+  });
+
+
+
+  /* ---------- schedule: each beat's start time from its word count (≈ speech pace) ---------- */
+  const WPS = 2.8; let pace = cfg.pace;
+  const beats = []; S.forEach((s, si) => (s.beats || []).forEach((b, bi) => beats.push({ si, bi, who: b.who, line: b.line, scene: s.title, run: b.run, min: b.min, words: b.words })));
+  /* Delivery map: r = how fast the line is said (1 = normal, <1 slow/dramatic, >1 rattled off), p = pause after it (s). */
+  const DELIVERY = {
+    'starting is easy': [.6, .8], 'sticking with it': [.75, 1.2], 'we know, because': [.8, .9], 'i\'m shaurya': [.9, .3], 'i\'m akaash': [.9, .3], 'and this is nuvo': [.65, 1.2],
+    'here\'s the truth': [.8, 1], 'you don\'t quit because': [.9, .8], 'you quit because': [.7, 1.3], 'solo streaks fade': [1, .6], 'most new goals': [.9, .8], 'but competition keeps': [1, .7], 'nobody wants to lose': [.65, 1.3],
+    'so we built nuvo': [.75, 1.1], 'any goal': [.6, .5], 'live competition': [.7, .6], 'with your friends': [1, .5], 'nuvo.': [.45, 1.4],
+    'three steps': [.8, .5], 'create a challenge': [.9, .4], 'invite your crew': [.9, .4], 'move.': [.5, .6], 'see the result': [1, .5], 'that\'s the whole product': [.9, .8],
+    'and this is the part': [.95, .6], 'ai motion proof': [.6, 1.1], 'point your camera': [1, .4], 'it tracks your movement': [1, .6], 'not perfect': [.8, .8], 'so you can not just': [1, .6], 'it runs on your phone': [1.1, .5], 'let me show you': [.8, 1.2], 'that is the edge': [.8, 1],
+    'and we are clearly': [1, .3], '1,400 people': [.8, .5], 'and we have not even': [.85, .8], 'that changes october': [.75, 1.1], 'covered by abc11': [1, .5], 'all while we are': [.9, .8],
+    'here\'s what we need': [.9, .5], 'mentorship': [.7, .5], 'introductions': [.7, .5], 'and fuel': [.6, .8], 'every dollar goes': [1, .6],
+    'we stopped waiting for permission': [.8, .9], 'we\'re nuvo': [.6, .9], 'thank you': [.6, 1.4]
+  };
+  const TARGET = 410;
+  const deliv = b => { const k = b.line.replace(/[’‘]/g, "'").toLowerCase(); const key = Object.keys(DELIVERY).find(x => k.startsWith(x)); return DELIVERY[key] || [1, .35]; };
+  (() => {
+    beats.forEach((b, i) => { const [r, pz] = deliv(b); b.r = r; b.dur = Math.max(b.words / (WPS * r), (b.min || 1.1) * .45); b.gap = pz + (beats[i + 1] && beats[i + 1].si !== b.si ? .9 : 0); });
+    const raw = beats.reduce((a, b) => a + b.dur + b.gap, 0), k = TARGET / raw;   // squeeze/stretch so the whole talk lands on 3:00
+    beats.forEach(b => { b.dur0 = b.dur * k; b.gap0 = b.gap * k; });
+  })();
+  /* per-speaker speed: Akaash and Shaurya each get their own multiplier; the schedule is rebuilt whenever it changes */
+  function buildSchedule() {
+    const sp = w => Math.max(.5, Math.min(1.8, w === 'A' ? (cfg.paceA || 1) : (cfg.paceS || 1)));
+    let t = 0; beats.forEach(b => { const f = sp(b.who); b.dur = b.dur0 / f; b.gap = b.gap0 / f; b.at = t; t += b.dur + b.gap; }); beats.total = t;
+  }
+  buildSchedule();
+
+  /* ---------- engine ---------- */
+  let cur = -2, si = -1, busy = false, started = false, t0 = 0, live = [], notes = null, auto = cfg.auto, paused = false, pauseAt = 0, ready = false;
+  const MOODS = [[0, 0, 0, 0], [8, 6, -6, -6], [-6, 10, 6, -10], [10, -8, -10, 8], [-10, 4, 8, -4], [4, -6, -4, 6], [0, 0, 0, 0], [0, 0, 0, 0]];
+  const clockNow = () => ((paused ? pauseAt : Date.now()) - t0) / 1000 * pace;
+  const rebase = () => { if (cur >= 0) t0 = (paused ? pauseAt : Date.now()) - beats[cur].at / pace * 1000; };
+
+  function unmount() {
+    live.forEach(t => t.kill()); live = [];
+    const old = stage.firstElementChild; if (old) { $$('video', old).forEach(v => v.pause()); gsap.killTweensOf(old.querySelectorAll('*')); old.remove(); }
+  }
+  function fitBeat(tl, gi) {            // squeeze a beat's animation into its slot instead of cutting it off when the next beat fires
+    const b = beats[gi], n = beats[gi + 1]; if (!auto || !n || n.si !== b.si) return;
+    const slot = (n.at - b.at) / pace * .96, d = tl.duration(); if (d > slot) tl.timeScale(Math.min(2.2, d / slot));
+  }
+  function mount(i, upTo, playLast) {
+    unmount(); si = i;
+    const sc = S[i], el = document.createElement('div'); el.className = 'scene'; el.innerHTML = sc.html(); stage.appendChild(el);
+    document.body.dataset.theme = sc.theme;
+    const m = MOODS[i]; gsap.to('#b1', { x: m[0] + 'vw', y: m[1] + 'vh', duration: 2.4 }); gsap.to('#b2', { x: m[2] + 'vw', y: m[3] + 'vh', duration: 2.4 });
+    $$('.hid', el).forEach(e => gsap.set(e, { autoAlpha: 0 }));
+    sc.init && sc.init(el);
+    for (let k = 0; k <= upTo; k++) {
+      const last = k === upTo && playLast;
+      ff = !last; const gi = beats.findIndex(b => b.si === i && b.bi === k); const tl = beats[gi].run(el); live.push(tl); if (last) fitBeat(tl, gi);
+      if (!last) tl.progress(1, false); ff = false;
+    }
+  }
+  const spk = $('#speaker');
+  function status() {
+    $('#progress').style.transform = `scaleX(${Math.max(0, cur + 1) / beats.length})`;
+    const b = beats[cur];
+    if (b) { spk.className = 'on ' + b.who; $('.nm', spk).textContent = b.who === 'A' ? 'AKAASH' : 'SHAURYA'; $('.ini', spk).textContent = b.who; } else spk.className = '';
+    if (notes && !notes.closed && notes.update) notes.update(cur, { auto, paused, pace });
+  }
+  function show(gt, instantBack = false) {
+    gt = Math.max(-1, Math.min(beats.length - 1, gt));
+    if (gt === cur || busy) return;
+    const tgtScene = gt < 0 ? 0 : beats[gt].si, tgtBi = gt < 0 ? -1 : beats[gt].bi;
+    const fwdSame = cur >= 0 && gt === cur + 1 && beats[gt].si === si;
+    if (fwdSame) {
+      live.forEach(t => { const rem = t.duration() - t.time(); if (rem > .05) t.timeScale(Math.max(1, rem / .45)); });   // let the previous beat finish quickly instead of overlapping
+      const tl = beats[gt].run(stage.firstElementChild); live.push(tl); fitBeat(tl, gt); cur = gt; status(); if (beats[gt - 1].who !== beats[gt].who) beatPulse(); return;
+    }
+    const sceneChange = tgtScene !== si, forward = gt > cur;
+    const doMount = () => { mount(tgtScene, tgtBi, forward && !instantBack); beatPulse(); };
+    cur = gt; status();
+    if (!sceneChange && !forward) { doMount(); return; }
+    if (si === -1 || instantBack) { doMount(); return; }
+    busy = true; const c1 = $('#c1'), c2 = $('#c2');
+    gsap.timeline({ onComplete: () => { busy = false; } }).set([c1, c2], { x: '-101%' })
+      .to(c1, { x: '0%', duration: .45, ease: 'power3.inOut' }, 0).to(c2, { x: '0%', duration: .45, ease: 'power3.inOut' }, .09)
+      .call(doMount, null, .6)
+      .to(c1, { x: '101%', duration: .5, ease: 'power3.inOut' }, .65).to(c2, { x: '101%', duration: .5, ease: 'power3.inOut' }, .74);
+  }
+  function advance() {
+    if (!started) { if (!ready) return; started = true; gsap.to('#loader', { autoAlpha: 0, duration: .5, onComplete: () => $('#loader').remove() }); const h = parseInt(location.hash.slice(1), 10); gsap.delayedCall(.4, () => { if (h > 0) { show(h - 1, true); rebase(); } else { mount(0, -1, false); cur = -1; status(); } }); return; }
+    if (counting) return;
+    if (cur === -1) { startTalk(); return; }
+    if (cfg.adapt && started && cur >= 0 && auto && !paused && cur + 1 < beats.length) {
+      const c = clockNow(), want = beats[cur + 1].at;               // where the script says we should be vs where the speakers actually are
+      if (c > 8 && want > 8) { const ratio = Math.max(.75, Math.min(1.33, want / c)); applyPace(Math.max(.6, Math.min(1.6, Math.round(pace * (1 + (ratio - 1) * .45) * 100) / 100))); flash('Pace ' + pace.toFixed(2) + '×'); }
+    }
+    show(cur + 1); rebase();
+  }
+  const flash = msg => { const h = $('#hint'); if (mode === 'present') return; h.textContent = msg; gsap.killTweensOf(h); gsap.fromTo(h, { opacity: 1 }, { opacity: 0, duration: .6, delay: 1.4 }); };
+  const back = () => { if (started && cur >= 0) { show(cur - 1, true); rebase(); } };
+  const togglePause = () => { if (!started || cur < 0) return; if (paused) { paused = false; t0 += Date.now() - pauseAt; } else { paused = true; pauseAt = Date.now(); } status(); };
+  const applyPace = v => { const c = started && cur >= 0 ? clockNow() : 0; pace = v; if (started && cur >= 0) t0 = (paused ? pauseAt : Date.now()) - c / pace * 1000; status(); };
+  const setPace = d => NS.set({ pace: Math.round(Math.max(.6, Math.min(1.6, pace + d)) * 100) / 100 });
+  const toggleAuto = () => NS.set({ auto: !auto });
+  NS.onChange((st, ch) => { cfg = st; if ('perf' in ch) { if (st.perf === 'on') setLite(true); else if (st.perf === 'off') setLite(false); else autoPerf(); } if ('paceA' in ch || 'paceS' in ch) { const c = started && cur >= 0 ? beats[cur].at + Math.max(0, clockNow() - beats[cur].at) : 0; const rel = started && cur >= 0 ? (clockNow() - beats[cur].at) / (beats[cur].dur + beats[cur].gap) : 0; buildSchedule(); builtTl = false; if (started && cur >= 0) { t0 = (paused ? pauseAt : Date.now()) - (beats[cur].at + rel * (beats[cur].dur + beats[cur].gap)) / pace * 1000; } status(); } if ('pace' in ch) applyPace(st.pace); if ('auto' in ch) { auto = st.auto; if (auto) rebase(); status(); } if ('mode' in ch && st.mode !== mode) applyMode(st.mode); });
+  /* auto performance: if the first seconds run under ~40fps, drop the decorative effects */
+  let perfDone = false;
+  function autoPerf() {
+    if (perfDone && cfg.perf !== 'auto') return; perfDone = true;
+    if (cfg.perf === 'on') return setLite(true); if (cfg.perf === 'off') return setLite(false);
+    let n = 0, t0p = 0, bad = 0; const f = t => { if (t0p) { n++; if (t - t0p > 28) bad++; } t0p = t; if (n < 150) requestAnimationFrame(f); else if (bad / n > .35) { setLite(true); flash && flash('Performance mode on'); } }; requestAnimationFrame(f);
+  }
+  let counting = false;
+  function startTalk() {
+    autoPerf();
+    const n = cfg.countdown | 0; if (counting) return;
+    const go = () => { t0 = Date.now(); show(0); };
+    if (!n) return go();
+    counting = true; const el = $('#count'); let k = n;
+    const tick = () => { el.textContent = k > 0 ? k : 'GO'; el.className = 'on'; gsap.fromTo(el, { scale: 1.8, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: .35, ease: 'back.out(2)' });
+      if (k === 0) { gsap.to(el, { autoAlpha: 0, duration: .4, delay: .4, onComplete: () => { el.className = ''; } }); counting = false; go(); } else { k--; setTimeout(tick, 1000); } };
+    tick();
+  }
+  window.NUVO = { next: advance, WPS, prev: back, pause: togglePause, auto: toggleAuto, pace: setPace, beats, get cur() { return cur; }, get pace() { return pace; } };
+
+  /* the clock: fires each beat when its scheduled time arrives */
+  setInterval(() => {
+    if (!started || cur < 0 || !auto || paused || busy) return;
+    const t = clockNow();
+    if (cur + 1 < beats.length && t >= beats[cur + 1].at) show(cur + 1);
+  }, 60);
+
+  /* ---------- presenter window ---------- */
+  function openNotes() {
+    notes = window.open('', 'nuvo-notes', 'width=780,height=1000');
+    if (!notes) return;
+    const data = JSON.stringify(beats.map(b => ({ who: b.who, line: b.line, scene: b.scene, at: Math.round(b.at) })));
+    notes.document.open();
+    notes.document.write(`<!doctype html><title>Nuvo · presenter</title><style>
+      body{margin:0;background:#07152b;color:#fff;font-family:"Barlow Condensed","Arial Narrow",sans-serif}
+      #top{position:sticky;top:0;background:#0a1a33;padding:12px 22px;display:flex;justify-content:space-between;align-items:center;font-size:32px;font-weight:800;letter-spacing:.08em;border-bottom:3px solid #1268ff;gap:12px}
+      #top button{font:800 22px "Barlow Condensed",sans-serif;letter-spacing:.08em;background:#1268ff;color:#fff;border:0;border-radius:10px;padding:6px 14px;cursor:pointer}#top button.off{background:#35507f}
+      #now{padding:24px 24px;border-bottom:3px solid #1b2e57;min-height:220px}#now .who{font-size:30px;letter-spacing:.2em;font-weight:800}#now .t{font-size:60px;font-weight:700;line-height:1.05;margin-top:10px}
+      .A{color:#4d94ff}.S{color:#27c947}#nx{padding:14px 24px;font-size:30px;color:#8fa3c7;border-bottom:3px solid #1b2e57}
+      .it{padding:9px 24px;font-size:27px;line-height:1.15;color:#6f84ab;display:flex;gap:14px;cursor:pointer}.it b{width:34px;flex:none}.it i{width:54px;flex:none;font-style:normal;opacity:.6}.it.on{background:#1268ff;color:#fff}.it.done{opacity:.4}
+      .sc{padding:16px 24px 4px;font-size:24px;letter-spacing:.2em;color:#4d94ff;font-weight:800}</style>
+      <div id=top><span id=cnt></span><span><button id=ba>AUTO</button> <button id=bp>PAUSE</button> <button id=bm>−</button> <button id=bq>+</button></span><span id=clk>0:00</span></div><div id=now></div><div id=nx></div><div id=list></div>
+      <script>const D=${data.replace(/</g, '\\u003c')};let t0=Date.now();const L=document.getElementById('list');let last='';
+      const mm=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+      D.forEach((b,i)=>{if(b.scene!==last){last=b.scene;L.insertAdjacentHTML('beforeend','<div class=sc>'+b.scene.toUpperCase()+'</div>')}L.insertAdjacentHTML('beforeend','<div class=it id=i'+i+'><b class='+b.who+'>'+(b.who==='A'?'AK':'SH')+'</b><i>'+mm(b.at)+'</i><span>'+b.line+'</span></div>')});
+      document.addEventListener('click',e=>{if(e.target.closest('button')||e.target.closest('.it'))return;opener.NUVO.next()});
+      ba.onclick=()=>opener.NUVO.auto();bp.onclick=()=>opener.NUVO.pause();bm.onclick=()=>opener.NUVO.pace(-.05);bq.onclick=()=>opener.NUVO.pace(.05);
+      document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown','Enter'].includes(e.key)){e.preventDefault();opener.NUVO.next()}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();opener.NUVO.prev()}if(e.key===' '){e.preventDefault();opener.NUVO.pause()}});
+      setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);clk.textContent=mm(s)},500);
+      window.update=function(g,st){D.forEach((_,i)=>{const e=document.getElementById('i'+i);e.className='it'+(i===g?' on':i<g?' done':'')});
+        const b=D[g],n=D[g+1];now.innerHTML=b?'<div class="who '+b.who+'">'+(b.who==='A'?'AKAASH':'SHAURYA')+' · '+b.scene.toUpperCase()+'</div><div class=t>'+b.line+'</div>':'<div class=t style="color:#8fa3c7">Cover. Press → when you start talking.</div>';
+        nx.innerHTML=n?'NEXT → <span class='+n.who+'>'+(n.who==='A'?'AKAASH':'SHAURYA')+'</span>: '+n.line:'';cnt.textContent=(g+1)+' / '+D.length;
+        if(st){ba.className=st.auto?'':'off';ba.textContent=st.auto?'AUTO ON':'AUTO OFF';bp.textContent=st.paused?'RESUME':'PAUSE';bq.title=bm.title='pace '+st.pace.toFixed(2)}
+        const el=document.getElementById('i'+g);el&&el.scrollIntoView({block:'center',behavior:'smooth'})};
+      window.update(${cur},${JSON.stringify({ auto, paused, pace })});<\/script>`);
+    notes.document.close();
+  }
+
+  /* ---------- practice HUD ---------- */
+  const pr = $('#practice'), turn = $('#turn'), frameEl = $('#frame'); let lastWho = null, turnT, builtTl = false;
+  const mmss = t => `${Math.floor(Math.max(0, t) / 60)}:${String(Math.floor(Math.max(0, t) % 60)).padStart(2, '0')}`;
+  function buildTl() {
+    const tl = $('.tl', pr); tl.innerHTML = '';
+    beats.forEach((b, i) => { const e = document.createElement('i'); e.className = b.who; e.id = 'tl' + i; e.style.flex = (b.dur + b.gap) + ' 0 0'; tl.appendChild(e); });
+    const ph = document.createElement('i'); ph.className = 'ph'; tl.appendChild(ph); builtTl = true;
+  }
+  function hud() {
+    if (mode !== 'practice') return;
+    if (!builtTl) buildTl();
+    const b = beats[cur], n = beats[cur + 1], t = clockNow();
+    if (!started || cur < 0) {
+      pr.className = beats[0].who; $('.who', pr).textContent = 'READY'; $('.ini', pr).textContent = '▶'; $('.sub', pr).textContent = n ? 'PRESS → TO START' : '';
+      $('.line', pr).innerHTML = '<span class="n">Cover is up. ' + (beats[0].who === 'A' ? 'Akaash' : 'Shaurya') + ' opens: “' + beats[0].line + '”</span>'; $('.nxt', pr).textContent = ''; $('.cd', pr).textContent = '–'; $('.tm', pr).textContent = '0:00 / ' + mmss(beats.total / pace); return;
+    }
+    pr.className = b.who; $('.who', pr).textContent = b.who === 'A' ? 'AKAASH' : 'SHAURYA'; $('.ini', pr).textContent = b.who; $('.sub', pr).textContent = 'YOUR LINE';
+    const w = b.line.split(/\s+/), sp = b.dur, k = Math.min(w.length, Math.max(0, Math.floor((t - b.at) / sp * w.length)));
+    const key = cur + ':' + k; if (pr._k !== key) { pr._k = key; $('.line', pr).innerHTML = w.map((x, i) => `<span class="${i < k ? 'd' : i === k ? 'n' : ''}">${x}</span>`).join(' '); }
+    $('.nxt', pr).innerHTML = n ? `NEXT → <b class="${n.who}">${n.who === 'A' ? 'AKAASH' : 'SHAURYA'}</b>: ${n.line}` : 'END';
+    const cd = n ? (n.at - t) / pace : 0; $('.cd', pr).innerHTML = n ? `${Math.max(0, cd).toFixed(1)}<small>s${t > b.at + b.dur ? ' · PAUSE' : b.r < .8 ? ' · SLOW' : b.r > 1.1 ? ' · FAST' : ''}</small>` : '–';
+    $('.tm', pr).textContent = `${mmss(t / pace)} / ${mmss(beats.total / pace)}${paused ? ' · PAUSED' : auto ? '' : ' · MANUAL'}`;
+    $$('.tl i', pr).forEach((e, i) => e.classList.toggle('cur', i === cur));
+    const ph = $('.ph', pr); if (ph) ph.style.left = Math.min(100, t / beats.total * 100) + '%';
+    if (b.who !== lastWho) { lastWho = b.who; turn.className = b.who + ' on'; turn.textContent = (b.who === 'A' ? 'AKAASH' : 'SHAURYA') + ' →'; frameEl.className = b.who + ' on'; clearTimeout(turnT); turnT = setTimeout(() => { turn.classList.remove('on'); frameEl.classList.remove('on'); }, 1300); }
+  }
+  setInterval(hud, 100);
+  applyMode(mode);
+
+  /* ---------- run-through: full script beside the slides ---------- */
+  const sp = $('#script'); let builtSc = false, lastLn = -1;
+  function buildScript() {
+    let last = '', h = '';
+    beats.forEach((b, i) => { if (b.scene !== last) { last = b.scene; h += `<div class="sec">${b.scene}</div>`; }
+      h += `<div class="ln ${b.who}" id="ln${i}"><b>${b.who === 'A' ? 'AKAASH' : 'SHAURYA'}</b><span>${b.line}</span></div>`; });
+    $('.list', sp).innerHTML = h; $$('.ln', sp).forEach((e, i) => e.onclick = () => { if (started) { show(i); rebase(); } }); builtSc = true;
+  }
+  function runHud() {
+    if (!builtSc) buildScript();
+    const b = beats[cur], n = beats[cur + 1], t = clockNow();
+    $('.cd2', sp).innerHTML = started && cur >= 0 && n ? `${Math.max(0, (n.at - t) / pace).toFixed(1)}<small>s to next${t > b.at + b.dur ? ' · PAUSE' : b.r < .8 ? ' · SLOW' : b.r > 1.1 ? ' · FAST' : ''}</small>` : (counting ? '…' : started ? '' : 'Press → to start');
+    $('.tm2', sp).textContent = started && cur >= 0 ? `${mmss(t / pace)} / ${mmss(beats.total / pace)}${paused ? ' · PAUSED' : auto ? '' : ' · MANUAL'}` : `0:00 / ${mmss(beats.total / pace)}`;
+    if (!b) { $$('.ln.cur', sp).forEach(e => e.classList.remove('cur')); return; }
+    if (lastLn !== cur) { const old = $('#ln' + lastLn, sp); if (old) { old.classList.remove('cur'); $('span', old).textContent = beats[lastLn].line; } const el = $('#ln' + cur, sp); el.classList.add('cur'); lastLn = cur; el.scrollIntoView({ block: 'center', behavior: 'smooth' }); sp._k = ''; }
+    const w = b.line.split(/\s+/), spd = b.dur, k = Math.min(w.length, Math.max(0, Math.floor((t - b.at) / spd * w.length)));
+    const key = cur + ':' + k; if (sp._k !== key) { sp._k = key; $('span', $('#ln' + cur, sp)).innerHTML = w.map((x, i) => `<u class="${i < k ? 'd' : i === k ? 'n' : ''}">${x}</u>`).join(' '); }
+  }
+  setInterval(() => { if (mode === 'run') runHud(); }, 100);
+  sp.addEventListener('click', e => e.stopPropagation());
+
+  /* ---------- settings overlay (S) ---------- */
+  const sov = $('#sov'); let setPanel = null, wasPaused = true;
+  function toggleSettings() { sov.classList.contains('on') ? closeSettings() : openSettings(); }
+  function openSettings() { if (!setPanel) setPanel = NS.render($('.box', sov), { total: () => beats.total }); setPanel.refresh(); sov.classList.add('on'); wasPaused = paused; if (started && cur >= 0 && !paused) togglePause(); }
+  function closeSettings() { if (!sov.classList.contains('on')) return; sov.classList.remove('on'); if (started && cur >= 0 && paused && !wasPaused) togglePause(); }
+  $('.x', sov).onclick = closeSettings; sov.addEventListener('click', e => { e.stopPropagation(); if (e.target === sov) closeSettings(); });
+
+  /* ---------- input ---------- */
+  const timerEl = $('#timer');
+  setInterval(() => { if (!started || cur < 0) return; const t = clockNow() / pace; timerEl.innerHTML = `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}<small>beat ${cur + 1}/${beats.length} · ${auto ? (paused ? 'paused' : 'auto') : 'manual'}</small>`; }, 250);
+  addEventListener('keydown', e => {
+    const k = e.key;
+    if (['ArrowRight', 'ArrowDown', 'PageDown', 'Enter'].includes(k)) { e.preventDefault(); advance(); }
+    else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); back(); }
+    else if (k === ' ') { e.preventDefault(); if (!started || cur < 0) advance(); else togglePause(); }
+    else if (k === 'a' || k === 'A') toggleAuto();
+    else if (k === '+' || k === '=') setPace(.05);
+    else if (k === '-' || k === '_') setPace(-.05);
+    else if (k === 'f' || k === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+    else if (k === 'b' || k === 'B' || k === '.') $('#black').classList.toggle('on');
+    else if (k === 't' || k === 'T') timerEl.classList.toggle('on');
+    else if (k === 'p' || k === 'P') openNotes();
+    else if (k === 'm' || k === 'M') NS.set({ mode: { present: 'practice', practice: 'run', run: 'present' }[mode] });
+    else if (k === 's' || k === 'S') toggleSettings();
+    else if (k === 'Escape') closeSettings();
+  });
+  addEventListener('click', advance);
+  let tx = 0; addEventListener('touchstart', e => tx = e.touches[0].clientX, { passive: true });
+  addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) dx < 0 ? advance() : back(); }, { passive: true });
+  let idle; addEventListener('mousemove', () => { document.body.classList.remove('hide-cursor'); clearTimeout(idle); idle = setTimeout(() => document.body.classList.add('hide-cursor'), 2200); });
+
+  Promise.all([loadAll, document.fonts.ready]).then(() => {
+    ready = true;
+    advance();                       // shows the cover automatically; → then starts the talk
+    const h = $('#hint'); h.textContent = '→ start / resync   ← back   Space pause   A auto   +/- pace   P presenter   M present mode   F fullscreen   T timer   B blackout';
+    gsap.timeline({ delay: 3 }).to(h, { opacity: 1, duration: .6 }).to(h, { opacity: 0, duration: .8 }, '+=5');
+  });
+})();
+</script>
+</body>
+</html>

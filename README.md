@@ -42,3 +42,16 @@ cd presentation && python3 -m http.server 5173   # then open http://localhost:51
 `assets/img` contains photos of the team, `assets/press` contains images taken from getnuvo.net press coverage, and `assets/video/*` contains screen recordings of the Nuvo app made by testers. Check you have the right to publish them before you reuse this repo for anything else, and remove or replace them if not.
 
 No license has been chosen yet. Until one is added, all rights are reserved by the authors.
+
+## One file per deck (please keep it this way)
+
+Each slideshow lives in its own HTML file so two people can work on different decks without touching each other's work:
+
+| File | Deck |
+|---|---|
+| `presentation/tes-keynote.html` | Teen Entrepreneur Summit 2026, 3-minute two-speaker pitch (script-timed, 65 beats) |
+| `presentation/capitol-keynote.html` | Capitol keynote |
+| `presentation/capitol-keynote-draft.html` | Earlier Capitol draft built on the TES engine (kept so nothing is lost) |
+| `presentation/tes-readable.html` | Backup text slides for TES |
+
+Rules of thumb: edit only your deck's file; if you change something shared (`assets/settings.js`, `assets/fonts`, `index.html`), pull first and keep the change backwards compatible. `npm run deploy` refuses to deploy if GitHub has commits you do not have, because a deploy replaces the whole live site.

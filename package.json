@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "sh -c 'python3 -m http.server \"${1:-${PORT:-5173}}\" --directory presentation' --",
-    "deploy": "npx wrangler deploy"
+    "deploy": "npx wrangler deploy",
+    "predeploy": "node scripts/check-sync.mjs"
   }
 }
