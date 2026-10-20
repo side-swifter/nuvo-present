@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Nuvo — TES 2026 · Keynote mode</title>
+<title>Nuvo — RTP Conference · Keynote mode</title>
 <link rel="stylesheet" href="assets/fonts/fonts.css">
 <style>
   :root{
@@ -318,7 +318,7 @@
   /* ============ 0 · COVER ============ */
   S.push({
     title: 'Cover', theme: 'light', beats: [],
-    html: () => `<div class="abs" style="inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:46px">${logoTile(380)}<span class="chip b lg">Teen Entrepreneur Summit 2026</span></div>`,
+    html: () => `<div class="abs" style="inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:46px">${logoTile(380)}<span class="chip b lg">RTP Student Entrepreneurship Conference</span></div>`,
     init(el) { gsap.fromTo($('.tile', el), { scale: .6, autoAlpha: 0, rotation: -10 }, { scale: 1, autoAlpha: 1, rotation: 0, duration: 1, ease: 'back.out(1.6)' }); gsap.from($('.chip', el), { y: 40, autoAlpha: 0, duration: .8, delay: .4, ease: 'back.out(1.7)' }); }
   });
 

@@ -2,7 +2,7 @@
 
 ## Change the words
 
-The spoken script is the `line` argument of each `bt(...)` call in `tes-keynote.html`, for example:
+The spoken script is the `line` argument of each `bt(...)` call in `rtp-keynote.html`, for example:
 
 ```js
 bt('A', 'Three weeks.', el => { ...animation... }, 1.6),
@@ -76,7 +76,7 @@ ffmpeg -t 6 -i input.mov -vf "fps=24,scale=300:-2" -c:v libx264 -crf 30 -preset 
 
 ## Make a deck for another event
 
-1. Copy `tes-keynote.html` to a new file.
+1. Copy `rtp-keynote.html` to a new file.
 2. Replace the scenes and beats with your script (keep the `bt` structure), update `DELIVERY` and `TARGET`.
 3. Add a card for it in `index.html`.
 4. The settings, modes, presenter window and timing engine work unchanged.

@@ -1,6 +1,6 @@
 # How the keynote deck works
 
-Everything is in `presentation/tes-keynote.html` (CSS, markup templates and script in one file) plus `assets/settings.js`.
+Everything is in `presentation/rtp-keynote.html` (CSS, markup templates and script in one file) plus `assets/settings.js`.
 
 ## The idea
 
@@ -65,7 +65,7 @@ A tiny module on `window.NuvoSettings`: `get()`, `set(patch)`, `onChange(fn)`, `
 
 ## Backup deck
 
-`tes-readable.html` is an earlier, simpler design: 7 slides, GSAP timelines with click-through steps, no timing engine. It shares fonts and the phone video.
+`rtp-readable.html` is an earlier, simpler design: 7 slides, GSAP timelines with click-through steps, no timing engine. It shares fonts and the phone video.
 
 ## Energy levels
 

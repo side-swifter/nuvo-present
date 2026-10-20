@@ -36,7 +36,7 @@ Press **M** to cycle modes while it is running.
 | `F` | Fullscreen |
 | `Esc` | Close settings |
 
-Jump straight to a beat with `tes-keynote.html#30`. Add `?mode=practice`, `?mode=run` or `?mode=present` to pick a mode from a link.
+Jump straight to a beat with `rtp-keynote.html#30`. Add `?mode=practice`, `?mode=run` or `?mode=present` to pick a mode from a link.
 
 ## Settings
 
@@ -65,7 +65,7 @@ Open from the picker page or with **S** in the deck. Saved in the browser (`loca
 - Run **Practice** at least twice with both speakers. Set each person's speed.
 - Open the deck once on the actual presenting laptop (the first load downloads about 10 MB of media).
 - Check the projector resolution. Stage is 16:9; other ratios get letterboxed.
-- Keep the backup (`tes-readable.html`) one click away.
+- Keep the backup (`rtp-readable.html`) one click away.
 
 ## Big screens and TVs
 

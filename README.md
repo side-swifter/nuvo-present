@@ -1,6 +1,6 @@
 # Nuvo Present
 
-Animated, self-running pitch decks for **Nuvo** (getnuvo.net). Built for a 3-minute, two-speaker pitch (Teen Entrepreneur Summit 2026) where the slides *show* what is being said instead of repeating it.
+Animated, self-running pitch decks for **Nuvo** (getnuvo.net). Built for a 3-minute, two-speaker pitch (RTP Student Entrepreneurship Conference) where the slides *show* what is being said instead of repeating it.
 
 Live: https://present.getnuvo.net
 
@@ -15,8 +15,8 @@ cd presentation && python3 -m http.server 5173   # then open http://localhost:51
 | Path | What it is |
 |---|---|
 | `presentation/index.html` | Picker page: choose a deck and a mode, edit settings |
-| `presentation/tes-keynote.html` | **The main deck.** 65 timed beats, one visual per phrase of the script |
-| `presentation/tes-readable.html` | Backup deck: ordinary text slides (Problem, Solution, Proof, Ask) |
+| `presentation/rtp-keynote.html` | **The main deck.** 65 timed beats, one visual per phrase of the script |
+| `presentation/rtp-readable.html` | Backup deck: ordinary text slides (Problem, Solution, Proof, Ask) |
 | `presentation/assets/settings.js` | Shared settings module (speed, per-speaker speed, countdown, performance) |
 | `presentation/assets/` | Fonts, logos, team photos, press images, phone video, app screen recordings |
 | `presentation/_headers` | Cloudflare cache and robots headers |
@@ -49,9 +49,9 @@ Each slideshow lives in its own HTML file so two people can work on different de
 
 | File | Deck |
 |---|---|
-| `presentation/tes-keynote.html` | Teen Entrepreneur Summit 2026, 3-minute two-speaker pitch (script-timed, 65 beats) |
+| `presentation/rtp-keynote.html` | RTP Student Entrepreneurship Conference, 3-minute two-speaker pitch (script-timed, 65 beats) |
 | `presentation/capitol-keynote.html` | Capitol keynote |
-| `presentation/capitol-keynote-draft.html` | Earlier Capitol draft built on the TES engine (kept so nothing is lost) |
-| `presentation/tes-readable.html` | Backup text slides for TES |
+| `presentation/capitol-keynote-draft.html` | Earlier Capitol draft built on the same keynote engine (kept so nothing is lost) |
+| `presentation/rtp-readable.html` | Backup text slides for the RTP conference |
 
 Rules of thumb: edit only your deck's file; if you change something shared (`assets/settings.js`, `assets/fonts`, `index.html`), pull first and keep the change backwards compatible. `npm run deploy` refuses to deploy if GitHub has commits you do not have, because a deploy replaces the whole live site.
