@@ -2,7 +2,7 @@
    API: NuvoSettings.get() / set(patch) / onChange(fn) / render(el, opts). Defaults are in DEF. See docs/OPERATING.md. */
 (function () {
   const KEY = 'nuvo-settings', BASE_WPS = 3.0, BASE_TOTAL = 180, SHARE_A = 0.53;
-  const DEF = { pace: 1, auto: true, countdown: 3, adapt: true, paceA: 1, paceS: 1, perf: 'auto', energy: 'balanced', confetti: true, ambient: true, mode: 'present' };
+  const DEF = { pace: 1, auto: true, countdown: 3, adapt: true, paceA: 1, paceS: 1, perf: 'auto', energy: 'balanced', confetti: true, ambient: true, mode: 'present', voice: 'off' };
   const subs = [];
   const get = () => { try { return Object.assign({}, DEF, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { return Object.assign({}, DEF); } };
   const set = p => { const s = Object.assign(get(), p); try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} subs.forEach(f => f(s, p)); return s; };
@@ -59,6 +59,9 @@
         <div class="nvhd" style="margin-top:6px"><h4 style="font-size:24px;color:#1268ff">Akaash</h4><span class="nvnum"><input type="number" id="pan" min="0.5" max="1.8" step="0.01" inputmode="decimal">×</span></div><input type="range" id="pas" min="0.6" max="1.6" step="0.05">
         <div class="nvhd"><h4 style="font-size:24px;color:#0a7a2f">Akshay / Shaurya</h4><span class="nvnum"><input type="number" id="psn" min="0.5" max="1.8" step="0.01" inputmode="decimal">×</span></div><input type="range" id="pss" min="0.6" max="1.6" step="0.05">
                 <div class="hint">Each speaker gets their own speed on top of the main one. 1.00× is the script's normal pace.</div></div>
+      <div class="nvr"><div class="nvhd"><h4>Read aloud</h4></div>
+        <div class="nvseg" data-k="voice"><button data-v="off">Off</button><button data-v="A">Akaash's lines</button><button data-v="S">Akshay's lines</button></div>
+        <div class="hint">Practice alone: the computer says the other person's lines out loud, on cue and at the script's speed, and you say yours. Pick the lines you are NOT saying. RTP keynote only.</div></div>
       <div class="nvr"><div class="nvhd"><h4>Countdown</h4></div>
         <div class="nvseg" data-k="countdown"><button data-v="0">None</button><button data-v="3">3 sec</button><button data-v="5">5 sec</button></div>
         <div class="hint">Time to breathe between pressing → and the first line.</div></div>
@@ -78,6 +81,7 @@
       qa('[data-k="energy"] button').forEach(b => b.classList.toggle('on', b.dataset.v === s.energy));
       qa('[data-k="perf"] button').forEach(b => b.classList.toggle('on', b.dataset.v === s.perf));
       qa('[data-k="mode"] button').forEach(b => b.classList.toggle('on', b.dataset.v === s.mode));
+      qa('[data-k="voice"] button').forEach(b => b.classList.toggle('on', b.dataset.v === s.voice));
       qa('[data-k="countdown"] button').forEach(b => b.classList.toggle('on', +b.dataset.v === +s.countdown));
       qa('[data-k="pace"] button').forEach(b => b.classList.toggle('on', Math.abs(+b.dataset.v - s.pace) < .001));
       q('#ps').value = s.pace; const est = opts.total ? total() : BASE_TOTAL * (SHARE_A / s.paceA + (1 - SHARE_A) / s.paceS); q('#pv').textContent = 'Talk length about ' + mmss(est / s.pace);
@@ -86,7 +90,7 @@
       q('#pas').value = s.paceA; q('#pss').value = s.paceS; put('#pan', s.paceA); put('#psn', s.paceS);
       qa('[data-t]').forEach(i => { i.checked = !!s[i.dataset.t]; });
     }
-    qa('[data-k] button').forEach(b => b.onclick = () => { const k = b.parentNode.dataset.k; set({ [k]: (k === 'mode' || k === 'perf' || k === 'energy') ? b.dataset.v : +b.dataset.v }); refresh(); });
+    qa('[data-k] button').forEach(b => b.onclick = () => { const k = b.parentNode.dataset.k; set({ [k]: (k === 'mode' || k === 'perf' || k === 'energy' || k === 'voice') ? b.dataset.v : +b.dataset.v }); refresh(); });
     q('#ps').oninput = e => { set({ pace: +e.target.value }); refresh(); };
     q('#pas').oninput = e => { set({ paceA: +e.target.value }); refresh(); };
     q('#pss').oninput = e => { set({ paceS: +e.target.value }); refresh(); };

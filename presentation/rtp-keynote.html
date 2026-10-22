@@ -951,6 +951,20 @@
     const b = beats[cur];
     if (b) { spk.className = 'on ' + b.who; $('.nm', spk).textContent = b.who === 'A' ? 'AKAASH' : 'AKSHAY'; $('.ini', spk).textContent = b.who === 'A' ? 'AD' : 'AS'; } else spk.className = '';
     if (notes && !notes.closed && notes.update) notes.update(cur, { auto, paused, pace });
+    sayBeat();
+  }
+  /* read aloud: the browser voice says the partner's lines (Settings → Read aloud) so one person can rehearse alone */
+  const synth = window.speechSynthesis; let spoken = -2, VOICE = null;
+  const pickVoice = () => { const vs = synth ? synth.getVoices().filter(v => /^en[-_]US/i.test(v.lang)) : []; VOICE = vs.find(v => /samantha|google us english|aria|jenny/i.test(v.name)) || vs[0] || null; };
+  if (synth) { pickVoice(); synth.onvoiceschanged = pickVoice; }
+  function sayBeat() {
+    if (!synth) return;
+    if (paused || !started) { spoken = -2; synth.cancel(); return; }
+    if (cur === spoken) return; spoken = cur; synth.cancel();
+    const b = beats[cur]; if (!b || cfg.voice !== b.who) return;
+    const u = new SpeechSynthesisUtterance(b.line.replace(/[“”]/g, ''));
+    u.rate = Math.max(.8, Math.min(1.6, b.words / Math.max(.5, b.dur / pace) / 2.6));   // fit the line into its slot (the voice says ~2.6 words/s at rate 1)
+    u.lang = 'en-US'; if (VOICE) u.voice = VOICE; synth.speak(u);
   }
   function show(gt, instantBack = false) {
     gt = Math.max(-1, Math.min(beats.length - 1, gt));
@@ -1063,7 +1077,7 @@
       pr.className = beats[0].who; $('.who', pr).textContent = 'READY'; $('.ini', pr).textContent = '▶'; $('.sub', pr).textContent = n ? 'PRESS → TO START' : '';
       $('.line', pr).innerHTML = '<span class="n">Cover is up. ' + (beats[0].who === 'A' ? 'Akaash' : 'Akshay') + ' opens: “' + beats[0].line + '”</span>'; $('.nxt', pr).textContent = ''; $('.cd', pr).textContent = '–'; $('.tm', pr).textContent = '0:00 / ' + mmss(beats.total / pace); return;
     }
-    pr.className = b.who; $('.who', pr).textContent = b.who === 'A' ? 'AKAASH' : 'AKSHAY'; $('.ini', pr).textContent = b.who === 'A' ? 'AD' : 'AS'; $('.sub', pr).textContent = 'YOUR LINE';
+    pr.className = b.who; $('.who', pr).textContent = b.who === 'A' ? 'AKAASH' : 'AKSHAY'; $('.ini', pr).textContent = b.who === 'A' ? 'AD' : 'AS'; $('.sub', pr).textContent = cfg.voice === b.who ? 'READ ALOUD' : 'YOUR LINE';
     const w = b.line.split(/\s+/), sp = b.dur, k = Math.min(w.length, Math.max(0, Math.floor((t - b.at) / sp * w.length)));
     const key = cur + ':' + k; if (pr._k !== key) { pr._k = key; $('.line', pr).innerHTML = w.map((x, i) => `<span class="${i < k ? 'd' : i === k ? 'n' : ''}">${x}</span>`).join(' '); }
     $('.nxt', pr).innerHTML = n ? `NEXT → <b class="${n.who}">${n.who === 'A' ? 'AKAASH' : 'AKSHAY'}</b>: ${n.line}` : 'END';
