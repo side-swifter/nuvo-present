@@ -905,6 +905,10 @@
     'so here\'s what we need': 1.3, 'recognition, funding': 1.45, 'and just being': 1.3, '$200 a year': 1.35, '$125 to get': 1.3,
     'we\'re not asking for charity': 1.2, 'we\'re asking for fuel': 1.15, 'every dollar goes': 1.2 };
   beats.forEach(b => { const k = b.line.replace(/[’‘]/g, "'").toLowerCase(), key = Object.keys(SLOWER).find(x => k.startsWith(x)); if (key) { b.dur0 *= SLOWER[key]; b.gap0 *= SLOWER[key]; } });
+  /* dramatic pauses: extra seconds of silence after the lines that need to land */
+  const PAUSE = { 'three weeks.': 1.5, 'you quit because': 2, 'nobody wants to lose': 1.5, 'this is nuvo': 1.5, 'ai motion proof': 1.5, 'nobody.': 2,
+    'and we haven\'t even launched': 1.5, 'imagine what we do': 1.5, 'we\'re asking for fuel': 1.5, 'right now': 1, 'we\'re nuvo': 1.5 };
+  beats.forEach(b => { const k = b.line.replace(/[’‘]/g, "'").toLowerCase(), key = Object.keys(PAUSE).find(x => k.startsWith(x)); if (key) b.gap0 += PAUSE[key]; });
   /* per-speaker speed: Akaash and Akshay each get their own multiplier; the schedule is rebuilt whenever it changes */
   function buildSchedule() {
     const sp = w => Math.max(.5, Math.min(1.8, w === 'A' ? (cfg.paceA || 1) : (cfg.paceS || 1)));
