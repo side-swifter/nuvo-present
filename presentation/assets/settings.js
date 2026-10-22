@@ -8,7 +8,7 @@
   const set = p => { const s = Object.assign(get(), p); try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) {} subs.forEach(f => f(s, p)); return s; };
   const onChange = f => subs.push(f);
   const mmss = t => { t = Math.round(t); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); };
-  const SAMPLE = 'Three weeks. That’s how long the average person sticks to a goal before they quit. We know, because we were those people. I’m Shaurya. I’m Akaash. And we didn’t set out to build a company. We just got sick of quitting on ourselves.';
+  const SAMPLE = 'Three weeks. That’s how long the average person sticks to a goal before they quit. We know, because we were those people. I’m Akshay. I’m Akaash. And we didn’t set out to build a company. We just got sick of quitting on ourselves.';
 
   const css = document.createElement('style');
   css.textContent = `
@@ -57,7 +57,7 @@
           <div class="acts"><button type="button" class="nvgo" id="cgo">Start</button><button type="button" id="cap" style="display:none">Use this speed</button></div></div></div>
       <div class="nvr"><div class="nvhd"><h4>Speed for each person</h4></div>
         <div class="nvhd" style="margin-top:6px"><h4 style="font-size:24px;color:#1268ff">Akaash</h4><span class="nvnum"><input type="number" id="pan" min="0.5" max="1.8" step="0.01" inputmode="decimal">×</span></div><input type="range" id="pas" min="0.6" max="1.6" step="0.05">
-        <div class="nvhd"><h4 style="font-size:24px;color:#0a7a2f">Shaurya</h4><span class="nvnum"><input type="number" id="psn" min="0.5" max="1.8" step="0.01" inputmode="decimal">×</span></div><input type="range" id="pss" min="0.6" max="1.6" step="0.05">
+        <div class="nvhd"><h4 style="font-size:24px;color:#0a7a2f">Akshay / Shaurya</h4><span class="nvnum"><input type="number" id="psn" min="0.5" max="1.8" step="0.01" inputmode="decimal">×</span></div><input type="range" id="pss" min="0.6" max="1.6" step="0.05">
                 <div class="hint">Each speaker gets their own speed on top of the main one. 1.00× is the script's normal pace.</div></div>
       <div class="nvr"><div class="nvhd"><h4>Countdown</h4></div>
         <div class="nvseg" data-k="countdown"><button data-v="0">None</button><button data-v="3">3 sec</button><button data-v="5">5 sec</button></div>

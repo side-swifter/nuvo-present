@@ -1,5 +1,3 @@
-# Old TES links keep working (query strings like ?mode=practice are preserved)
-/tes-keynote /rtp-keynote 302
-/tes-keynote.html /rtp-keynote 302
+# /tes-keynote is the Akaash & Shaurya TES deck again. The old readable link still goes to the RTP version.
 /tes-readable /rtp-readable 302
 /tes-readable.html /rtp-readable 302
