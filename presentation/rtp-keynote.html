@@ -765,14 +765,15 @@
       bt('S', 'recognition, funding, mentorship, and connections.', el => { const tl = T();
         tl.fromTo($$('.nd', el), { y: -900, rotation: i => [-8, 6, -5, 7][i], autoAlpha: 0 }, { y: 0, rotation: i => [-1.5, 1, -1, 1.5][i], autoAlpha: 1, stagger: .65, duration: .9, ease: 'bounce.out' }, 0)
           .to($$('.sl6', el), { autoAlpha: 0, duration: .3, stagger: .65 }, .6).call(() => burstAt($$('.nd', el)[3], 70), null, 2.3); return tl; }, 3.4),
-      bt('A', 'And let’s talk funding straight up, because every dollar is real to us.', el => { const tl = T();
-        tl.to($$('.nd', el), { y: 1300, rotation: () => rnd(-10, 10), stagger: .06, duration: .8, ease: 'power3.in' }, 0)
+      bt('A', 'And let’s talk funding straight up, because every dollar is real to us.', el => { gsap.killTweensOf($$('.nd,.sl6', el)); const tl = T();   // stop the previous beat's card drop first, or a late card lands back on screen
+        tl.to($$('.nd', el), { y: 1300, rotation: () => rnd(-10, 10), stagger: .06, duration: .8, ease: 'power3.in' }, 0).to($$('.sl6', el), { autoAlpha: 0, duration: .2 }, 0)
+          .set($$('.nd', el), { autoAlpha: 0 }, 1)
           .fromTo($('.coin', el), { scale: .2, y: -700, autoAlpha: 0 }, { scale: 1, y: 0, autoAlpha: 1, duration: .9, ease: 'bounce.out' }, .6)
           .to($('.coin .cf', el), { rotationY: 720, duration: 2.6, ease: 'power2.inOut' }, 1.6)   // spin the inner 3D coin; the wrapper keeps the drop, glow and exit
           .fromTo($$('.sd', el), { y: 160 }, { y: -1000, stagger: .14, duration: 2.4, ease: 'power1.out' }, 1.5)
           .fromTo($$('.sd', el), { autoAlpha: 0 }, { autoAlpha: 1, stagger: .14, duration: .2 }, 1.5).to($$('.sd', el), { autoAlpha: 0, stagger: .14, duration: .3 }, 3.5); return tl; }, 4.6),
-      bt('A', 'In January, we have a shot at CES in Vegas, the biggest tech stage on Earth.', el => { const tl = T();
-        tl.to($('.coin', el), { scale: .3, autoAlpha: 0, rotation: 200, duration: .5, ease: 'back.in(2)' }, 0)
+      bt('A', 'In January, we have a shot at CES in Vegas, the biggest tech stage on Earth.', el => { gsap.killTweensOf($$('.coin,.coin .cf,.sd,.nd', el)); const tl = T();
+        tl.set($$('.nd,.sl6,.sd', el), { autoAlpha: 0 }, 0).to($('.coin', el), { scale: .3, autoAlpha: 0, rotation: 200, duration: .5, ease: 'back.in(2)' }, 0)
           .fromTo($('.ces', el), { scale: 3, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: .9, ease: 'expo.out' }, .4)
           .fromTo($('.cj', el), { y: -200, autoAlpha: 0, rotation: -10 }, { y: 0, autoAlpha: 1, rotation: -3, duration: .7, ease: 'back.out(2)' }, 1.5)
           .fromTo($('.cv', el), { y: -200, autoAlpha: 0, rotation: 10 }, { y: 0, autoAlpha: 1, rotation: 3, duration: .7, ease: 'back.out(2)' }, 2.4)
@@ -781,11 +782,11 @@
       bt('A', 'That costs money.', el => { const tl = T();
         tl.fromTo($('.tag6', el), { y: -600, autoAlpha: 0, rotation: 0 }, { y: 0, autoAlpha: 1, duration: .6, ease: 'power3.out' }, 0)
           .to($('.tag6', el), { rotation: 18, duration: .5, ease: 'sine.inOut' }, .6).to($('.tag6', el), { rotation: -14, duration: .8, ease: 'sine.inOut', yoyo: true, repeat: 3 }, 1.1); return tl; }, 2.4),
-      bt('A', 'Every competition we enter costs money.', el => { const tl = T(), tks = $$('.tk', el);
+      bt('A', 'Every competition we enter costs money.', el => { gsap.killTweensOf($$('.tag6,.ces,.cj,.cv', el)); const tl = T(), tks = $$('.tk', el);
         tl.to($('.tag6', el), { y: -700, autoAlpha: 0, duration: .5, ease: 'power3.in' }, 0)
           .to($('.ces', el), { scale: .3, y: -330, x: -620, duration: .9, ease: 'expo.inOut' }, 0).to($$('.cj,.cv', el), { autoAlpha: 0, duration: .3 }, 0);
         tks.forEach((t, i) => tl.fromTo(t, { y: -300, rotation: rnd(-30, 30), autoAlpha: 0 }, { y: 560 + rnd(-40, 330), rotation: rnd(-14, 14), autoAlpha: 1, duration: 1, ease: 'bounce.out' }, .6 + i * .2)); return tl; }, 3.6),
-      bt('S', 'And just being a real company adds up,', el => { const tl = T(), l0 = $('.l0', el);
+      bt('S', 'And just being a real company adds up,', el => { gsap.killTweensOf($$('.tk,.ces,.tag6', el)); const tl = T(), l0 = $('.l0', el);
         tl.to($$('.tk', el), { y: 1300, rotation: () => rnd(-20, 20), stagger: .03, duration: .8, ease: 'power3.in' }, 0).to($('.ces', el), { autoAlpha: 0, duration: .3 }, 0).set($$('.tk,.nd,.sd,.coin,.cj,.cv,.tag6', el), { autoAlpha: 0 }, .9)
           .fromTo($('.rc6', el), { y: -800, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: .9, ease: 'expo.out' }, .4)
           .to(l0, { opacity: .2, duration: .3, yoyo: true, repeat: 9 }, 1.2); return tl; }, 3.2),
@@ -801,12 +802,12 @@
         tl.fromTo($('.hrt', el), { scale: .2, autoAlpha: 0, rotation: -30 }, { scale: 1, autoAlpha: 1, rotation: 0, duration: .8, ease: 'back.out(2)' }, 0)
           .fromTo($('.hsl', el), { scaleX: 0, transformOrigin: 'left center' }, { scaleX: 1, duration: .4, ease: 'power4.out' }, 1.1)
           .to($('.hrt', el), { x: '+=12', duration: .05, repeat: 7, yoyo: true }, 1.5); return tl; }, 2.4),
-      bt('S', 'We’re asking for fuel.', el => { const tl = T();
+      bt('S', 'We’re asking for fuel.', el => { gsap.killTweensOf($$('.hrt,.hsl', el)); const tl = T();
         tl.to($('.hrt', el), { y: 1200, rotation: 25, duration: .7, ease: 'power3.in' }, 0).set($$('.tk,.nd,.sd,.coin,.ces,.cj,.cv,.tag6', el), { autoAlpha: 0 }, 0)
           .fromTo($('.gg', el), { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: .7, ease: 'power3.out' }, .5)
           .to(el._g, { v: .5, duration: 1.6, ease: 'power2.inOut', onUpdate: el._setG }, 1.1)
           .to(el._g, { v: .54, duration: .35, yoyo: true, repeat: 3, ease: 'sine.inOut', onUpdate: el._setG }, 2.7); return tl; }, 2.2),
-      bt('S', 'Every dollar goes straight into launching and winning.', el => { const tl = T(), r = $('.rk6', el);
+      bt('S', 'Every dollar goes straight into launching and winning.', el => { gsap.killTweensOf(el._g); const tl = T(), r = $('.rk6', el);
         tl.set($$('.tk,.nd,.sd,.coin,.ces,.cj,.cv,.tag6', el), { autoAlpha: 0 }, 0).to(el._g, { v: 1, duration: 1.4, ease: 'power3.in', onUpdate: el._setG }, 0)
           .to(el._g, { v: .96, duration: .25, ease: 'sine.out', onUpdate: el._setG }, 1.4).to(el._g, { v: 1, duration: .25, ease: 'sine.in', onUpdate: el._setG }, 1.65)
           .call(() => burstAt($('.gg', el), 100), null, 1.5)
@@ -908,7 +909,7 @@
   beats.forEach(b => { const k = b.line.replace(/[’‘]/g, "'").toLowerCase(), key = Object.keys(SLOWER).find(x => k.startsWith(x)); if (key) { b.dur0 *= SLOWER[key]; b.gap0 *= SLOWER[key]; } });
   /* dramatic pauses: extra seconds of silence after the lines that need to land */
   const PAUSE = { 'three weeks.': 1.5, 'you quit because': 2, 'nobody wants to lose': 1.5, 'this is nuvo': 1.5, 'ai motion proof': 1.5, 'nobody.': 2,
-    'and we haven\'t even launched': 1.5, 'imagine what we do': 1.5, 'we\'re asking for fuel': 1.5, 'right now': 1, 'we\'re nuvo': 1.5 };
+    'and we haven\'t even launched': 1.5, 'imagine what we do': 1.5, 'we\'re asking for fuel': 1.5, 'we\'re changing how': 1.5, 'right now': 1, 'we\'re nuvo': 1.5 };
   beats.forEach(b => { const k = b.line.replace(/[’‘]/g, "'").toLowerCase(), key = Object.keys(PAUSE).find(x => k.startsWith(x)); if (key) b.gap0 += PAUSE[key]; });
   /* per-speaker speed: Akaash and Akshay each get their own multiplier; the schedule is rebuilt whenever it changes */
   function buildSchedule() {
