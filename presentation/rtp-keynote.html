@@ -587,8 +587,8 @@
       <div class="abs circ hid bl" style="left:1370px;top:420px;width:260px;height:260px;color:var(--blue-bright)">${ico('bolt', 150)}</div>
       <div class="abs hid cl" style="left:1400px;top:90px;color:#8fa3c7">${ico('cloud', 220, 'currentColor', 1.6)}<i class="abs" style="left:10px;top:100px;width:200px;height:12px;background:var(--red);border-radius:6px;transform:rotate(-35deg)"></i></div>
       <div class="abs slots hid" style="left:110px;top:300px;width:1700px;display:flex;gap:36px">${Array.from({ length: 5 }, (_, i) => i === 2 ? `<div class="sl2" style="width:300px;height:440px;display:flex;align-items:center;justify-content:center;border-radius:28px;background:rgba(18,104,255,.18);border:6px solid var(--blue-light);box-shadow:0 0 120px rgba(18,104,255,.7)">${logoTile(230)}</div>` : `<div class="sl" style="width:300px;height:440px;border-radius:28px;border:6px dashed #35507f;display:flex;align-items:center;justify-content:center;color:#35507f">${ico('x', 130, 'currentColor', 1.4)}</div>`).join('')}</div>
-      <div class="abs nb1 disp hid" style="left:0;right:0;top:60px;text-align:center;font-size:440px;line-height:.82;color:#fff">NOBODY.</div>
-      <div class="abs nb2 disp hid" style="left:0;right:0;top:520px;text-align:center;font-size:440px;line-height:.82;color:transparent;-webkit-text-stroke:7px var(--blue-light)">NOBODY.</div>`,
+      ${[0, 1, 2].map(() => `<div class="abs nbe disp hid" style="left:0;right:0;top:360px;text-align:center;font-size:440px;line-height:.82;color:transparent;-webkit-text-stroke:7px var(--blue-light)">NOBODY.</div>`).join('')}
+      <div class="abs nb1 disp hid" style="left:0;right:0;top:360px;text-align:center;font-size:440px;line-height:.82;color:#fff">NOBODY.</div>`,
     beats: [
       bt('S', 'And this right here is the part people don’t believe two high schoolers built.', el => { const tl = T(), my = $('.my', el);
         tl.fromTo(my, { scale: .3, rotation: -20, autoAlpha: 0 }, { scale: 1, rotation: 0, autoAlpha: 1, duration: .9, ease: 'back.out(2)' }, 0)
@@ -642,7 +642,8 @@
       bt('S', 'Nobody.', el => { const tl = T();
         tl.to($('.slots', el), { y: 1300, rotation: 4, duration: .8, ease: 'power3.in' }, 0).set($$('.vok,.cnt,.fake,.fx,.cam,.wall,.flash,.phw,.vf,.lk,.bl,.cl', el), { autoAlpha: 0 }, 0)
           .fromTo($('.nb1', el), { scale: 3, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: .7, ease: 'expo.out' }, .6)
-          .fromTo($('.nb2', el), { scale: 3, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: .7, ease: 'expo.out' }, 1.5); return tl; }, 2.4)
+          .fromTo($$('.nbe', el), { scale: 1, autoAlpha: .8 }, { scale: 1.7, autoAlpha: 0, stagger: .35, duration: 1.6, ease: 'power2.out', immediateRender: false }, 1.1)   // one word, echoing outward twice through the pause
+          .fromTo($$('.nbe', el), { scale: 1, autoAlpha: .55 }, { scale: 1.7, autoAlpha: 0, stagger: .35, duration: 1.6, ease: 'power2.out', immediateRender: false }, 2.5); return tl; }, 2.4)
     ]
   });
 
